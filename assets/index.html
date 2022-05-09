@@ -9,5 +9,21 @@
             });
         </script>
     </head>
-    <body></body>
+    <body>
+      <div id="ui">
+        <p id="content">
+        </p>
+      </div>
+
+      <script>
+        const render = function() {
+          const content = document.getElementById("content")
+          const page = Example()
+
+          content.innerHTML = Render(page)
+        }
+
+        setTimeout(render, 250)
+      </script>
+    </body>
 </html>  
