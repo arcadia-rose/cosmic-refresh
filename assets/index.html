@@ -11,16 +11,21 @@
     </head>
     <body>
       <div id="ui">
-        <p id="content">
-        </p>
+        <div id="room">
+          <div class="content"></div>
+        </div>
+        <div id="player">
+          <div class="content"></div>
+        </div>
       </div>
 
       <script>
         const render = function() {
-          const content = document.getElementById("content")
-          const page = Example()
+          const room = document.querySelector("#ui > #room > .content");
+          const player = document.querySelector("#ui > #player > .content");
 
-          content.innerHTML = Render(page)
+          let state = NewState();
+          player.innerText = `Number of items in inventory: ${state.PlayerState.Inventory.length}`;
         }
 
         setTimeout(render, 250)
