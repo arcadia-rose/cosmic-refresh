@@ -16,6 +16,7 @@
         </div>
         <div id="player">
           <div class="content"></div>
+          <button id="pick-up" onclick="Act('collectItem', [0])">Pick up item</button>
         </div>
       </div>
 
@@ -24,7 +25,13 @@
           const room = document.querySelector("#ui > #room > .content");
           const player = document.querySelector("#ui > #player > .content");
 
-          let state = NewState();
+          window.state = NewState();
+
+          window.Act = function(event, ids) {
+            window.state = GameLoop(event, ids.length, ...ids);
+            player.innerText = `Number of items in inventory: ${Object.keys(state.PlayerState.Inventory).length}`;
+          }
+
           player.innerText = `Number of items in inventory: ${Object.keys(state.PlayerState.Inventory).length}`;
         }
 
