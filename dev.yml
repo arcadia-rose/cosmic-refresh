@@ -1,0 +1,16 @@
+type: go
+
+up:
+  - go:
+      version: 1.18.1
+      modules: false
+
+env:
+  GO111MODULE: "off"
+
+commands:
+  build: cd cmd/wasm && GOOS=js GOARCH=wasm go build -o ../../assets/json.wasm
+  server: cd cmd/server && go run main.go
+
+open:
+  app: "http://localhost:9090"
