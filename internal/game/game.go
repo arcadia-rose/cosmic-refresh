@@ -1,6 +1,12 @@
 package game
 
+import "strconv"
+
 type Id uint
+
+func (i Id) ToString() string {
+	return strconv.FormatInt(int64(i), 10)
+}
 
 type Event string
 
@@ -12,6 +18,13 @@ type Item struct {
 	Amount uint
 }
 
+func (i Item) ToMap() map[string]interface{} {
+	return map[string]interface{}{
+		"Name":   i.Name,
+		"Amount": i.Amount,
+	}
+}
+
 type Player struct {
 	Insight   uint
 	Position  Id
@@ -21,6 +34,12 @@ type Player struct {
 type State struct {
 	PlayerState   Player
 	EventHandlers map[Event]func(State, []Id) State
+}
+
+func (s State) ToMap() map[string]interface{} {
+	return map[string]interface{}{
+		"PlayerState": s.PlayerState.ToMap(),
+	}
 }
 
 var ItemRegistry = map[Id]Item{
@@ -47,11 +66,15 @@ func NewPlayer() Player {
 }
 
 func (p Player) ToMap() map[string]interface{} {
+	items := map[string]interface{}{}
+	for id, item := range p.Inventory {
+		items[id.ToString()] = item.ToMap()
+	}
+
 	return map[string]interface{}{
-		"Insight":  p.Insight,
-		"Position": int(p.Position),
-		// When we figure out how we actually want to represent this
-		"Inventory": map[string]interface{}{},
+		"Insight":   p.Insight,
+		"Position":  int(p.Position),
+		"Inventory": items,
 	}
 }
 
