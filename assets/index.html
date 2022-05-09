@@ -25,7 +25,7 @@
           const player = document.querySelector("#ui > #player > .content");
 
           let state = NewState();
-          player.innerText = `Number of items in inventory: ${state.PlayerState.Inventory.length}`;
+          player.innerText = `Number of items in inventory: ${Object.keys(state.PlayerState.Inventory).length}`;
         }
 
         setTimeout(render, 250)

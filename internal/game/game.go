@@ -51,7 +51,7 @@ func (p Player) ToMap() map[string]interface{} {
 		"Insight":  p.Insight,
 		"Position": int(p.Position),
 		// When we figure out how we actually want to represent this
-		"Inventory": []interface{}{},
+		"Inventory": map[string]interface{}{},
 	}
 }
 
