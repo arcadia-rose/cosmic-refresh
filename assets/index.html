@@ -62,6 +62,8 @@
         </div>
         <div id="player">
           <div class="content"></div>
+          <p>Inventory</p>
+          <select multiple id="inventory"></select>
           <div id="actions"></div>
         </div>
       </div>
@@ -72,6 +74,7 @@
           const room = document.querySelector("#ui > #room > .content");
           const checkboxArray = document.querySelector("#ui > #room > .checkbox-array");
           const player = document.querySelector("#ui > #player > .content");
+          const inventory = document.querySelector("#ui > #player > #inventory");
           const actionsContainer = document.querySelector("#ui > #player > #actions");
 
           const renderNotification = function(notification) {
@@ -108,22 +111,14 @@
             }
           };
 
-          const inventoryString = function(inventory) {
-            let str = '';
-
-            for (let [id, item] of Object.entries(inventory)) {
-              str += `\n- ${item.name}: ${item.description}`;
+          const renderInventory = function() {
+            inventory.innerText = '';
+            for (let [id, item] of Object.entries(state.player.inventory)) {
+              let option = document.createElement("option");
+              option.value = id;
+              option.innerText = `${item.name}: ${item.description}`;
+              inventory.appendChild(option);
             }
-
-            if (str.length === 0) {
-              return 'nothing but the fear in the pit of your stomach';
-            }
-
-            return str;
-          }
-
-          const renderPlayer = function() {
-            player.innerText = `Inventory: ${inventoryString(state.player.inventory)}`
           }
 
           const action = function(event, ids) {
@@ -136,7 +131,7 @@
               }
 
               renderRoom()
-              renderPlayer()
+              renderInventory()
             }
           };
 
