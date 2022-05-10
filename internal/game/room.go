@@ -5,14 +5,16 @@ import (
 )
 
 type Room struct {
-	Description string   `json:"description"`
-	Items       []Item   `json:"items"`
-	Actions     []Action `json:"actions"`
+	Description string          `json:"description"`
+	Items       []Item          `json:"items"`
+	Actions     []Action        `json:"actions"`
+	Properties  map[string]bool `json:"properties"`
 }
 
 var RoomRegistry = map[Id]Room{
 	Id(1000): MainEntrance(),
 	Id(1001): ShoeRoom(),
+	Id(1002): DarkRoom(),
 }
 
 func MainEntrance() Room {
@@ -31,6 +33,7 @@ func MainEntrance() Room {
 		Description: description,
 		Items:       []Item{},
 		Actions:     actions,
+		Properties:  map[string]bool{},
 	}
 }
 
@@ -52,12 +55,32 @@ func ShoeRoom() Room {
 			To: Id(2),
 			Is: ItemE,
 		},
+		{
+			Do: EnterRoomEvt,
+			It: "Enter",
+			To: Id(1002),
+			Is: RoomE,
+		},
 	}
 
 	return Room{
 		Description: description,
 		Items:       []Item{ItemRegistry[Id(1)], ItemRegistry[Id(2)]},
 		Actions:     actions,
+		Properties:  map[string]bool{},
+	}
+}
+
+func DarkRoom() Room {
+	description := `A dark room. Good thing you brought that candlestick.`
+
+	return Room{
+		Description: description,
+		Items:       []Item{},
+		Actions:     []Action{},
+		Properties: map[string]bool{
+			"dark": true,
+		},
 	}
 }
 
@@ -90,6 +113,11 @@ func (r *Room) RemoveItem(item Item, id Id) {
 func enterRoom(state State, roomIds []Id) (State, *FlagSet, error) {
 	if len(roomIds) != 1 {
 		return state, nil, errors.New("No room ID specified.")
+	}
+
+	targetRoom := RoomRegistry[roomIds[0]]
+	if targetRoom.Properties["dark"] && !FlagRegistry[Id(2000)].Set {
+		return state, nil, nil
 	}
 
 	state.CurrentRoom = RoomRegistry[roomIds[0]]
