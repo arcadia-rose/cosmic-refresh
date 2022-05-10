@@ -68,7 +68,7 @@ func (s StateView) State() State {
 }
 
 var ItemRegistry = map[Id]Item{
-	Id(0): Item{
+	Id(0): {
 		Name:   "Key",
 		Amount: 1,
 	},
