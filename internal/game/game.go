@@ -1,12 +1,6 @@
 package game
 
-import "strconv"
-
 type Id uint
-
-func (i Id) ToString() string {
-	return strconv.FormatInt(int64(i), 10)
-}
 
 type Event string
 
@@ -14,32 +8,38 @@ type Room struct {
 }
 
 type Item struct {
-	Name   string
-	Amount uint
-}
-
-func (i Item) ToMap() map[string]interface{} {
-	return map[string]interface{}{
-		"Name":   i.Name,
-		"Amount": i.Amount,
-	}
+  Name   string `json:"name"`
+  Amount uint   `json:"amount"`
 }
 
 type Player struct {
-	Insight   uint
-	Position  Id
-	Inventory map[Id]Item
+  Insight   uint        `json:"insight"`
+  Position  Id          `json:"position"`
+  Inventory map[Id]Item `json:"inventory"`
 }
 
+// Internal representation of the game state only usably on the Go side.
 type State struct {
 	PlayerState   Player
 	EventHandlers map[Event]func(State, []Id) State
 }
 
-func (s State) ToMap() map[string]interface{} {
-	return map[string]interface{}{
-		"PlayerState": s.PlayerState.ToMap(),
-	}
+func (s State) View() StateView {
+  return StateView {
+    PlayerState: s.PlayerState,
+  }
+}
+
+// Shared representation of the game state meant to be communicated between JS & Go.
+// The non-serializable components of `State` must be reconstructed for internal use.
+type StateView struct {
+  PlayerState Player `json:"player"`
+}
+
+func (s StateView) State() State {
+  newState := NewState()
+  newState.PlayerState = s.PlayerState
+  return newState
 }
 
 var ItemRegistry = map[Id]Item{
@@ -62,19 +62,6 @@ func NewPlayer() Player {
 		Insight:   0,
 		Position:  Id(0),
 		Inventory: map[Id]Item{},
-	}
-}
-
-func (p Player) ToMap() map[string]interface{} {
-	items := map[string]interface{}{}
-	for id, item := range p.Inventory {
-		items[id.ToString()] = item.ToMap()
-	}
-
-	return map[string]interface{}{
-		"Insight":   p.Insight,
-		"Position":  int(p.Position),
-		"Inventory": items,
 	}
 }
 

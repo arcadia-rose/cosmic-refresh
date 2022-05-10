@@ -25,14 +25,14 @@
           const room = document.querySelector("#ui > #room > .content");
           const player = document.querySelector("#ui > #player > .content");
 
-          window.state = NewState();
+          window.state = JSON.parse(NewState());
 
           window.Act = function(event, ids) {
-            window.state = GameLoop(event, ids.length, ...ids);
-            player.innerText = `Number of items in inventory: ${Object.keys(state.PlayerState.Inventory).length}`;
+            window.state = JSON.parse(GameLoop(event, ids.length, ...ids));
+            player.innerText = `Number of items in inventory: ${Object.keys(state.player.inventory).length}`;
           }
 
-          player.innerText = `Number of items in inventory: ${Object.keys(state.PlayerState.Inventory).length}`;
+          player.innerText = `Number of items in inventory: ${Object.keys(state.player.inventory).length}`;
         }
 
         setTimeout(render, 250)
