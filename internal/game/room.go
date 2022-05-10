@@ -142,7 +142,9 @@ func UnlockedRoom() Room {
 				Is: RoomE,
 			},
 		},
-		Properties: map[string]bool{},
+		Properties: map[string]bool{
+			"checkboxes": true,
+		},
 	}
 }
 
