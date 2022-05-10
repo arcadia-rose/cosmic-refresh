@@ -2,7 +2,6 @@ package game
 
 import (
 	"errors"
-	"fmt"
 )
 
 type Room struct {
@@ -75,7 +74,6 @@ func (r *Room) RemoveItem(item Item, id Id) {
 	}
 
 	r.Items = invCopy
-	fmt.Printf("Items: %v\n", r.Items)
 
 	filteredActions := []Action{}
 	for _, action := range r.Actions {
