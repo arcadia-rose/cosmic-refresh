@@ -30,8 +30,8 @@ type Room struct {
 }
 
 type Item struct {
-	Name   string `json:"name"`
-	Amount uint   `json:"amount"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 type Player struct {
@@ -69,8 +69,12 @@ func (s StateView) State() State {
 
 var ItemRegistry = map[Id]Item{
 	Id(0): {
-		Name:   "Key",
-		Amount: 1,
+		Name:        "Key",
+		Description: "A simple iron key. You're not sure what door this opens.",
+	},
+	Id(1): {
+		Name:        "Shoe",
+		Description: "Disgusting. Don't put this on.",
 	},
 }
 
@@ -103,10 +107,19 @@ func ShoeRoom() Room {
   leaving one's shoes.  It's unlikely that a single living soul has been through here in some time
   and the shoes left on the rack are tattered and falling to pieces.`
 
+	actions := []Action{
+		{
+			Do: CollectItemEvt,
+			It: "Take",
+			To: Id(1),
+			Is: ItemE,
+		},
+	}
+
 	return Room{
 		Description: description,
-		Items:       []Item{},
-		Actions:     []Action{},
+		Items:       []Item{ItemRegistry[Id(1)]},
+		Actions:     actions,
 	}
 }
 

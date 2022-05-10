@@ -40,10 +40,33 @@
             }
           };
 
+          const inventoryString = function(inventory) {
+            let str = '';
+
+            for (let [id, item] of Object.entries(inventory)) {
+              if (str.length > 0) {
+                str += ', ';
+              }
+
+              str += `${item.name} (${item.description})`;
+            }
+            
+            if (str.length === 0) {
+              return 'nothing but the fear in the pit of your stomach';
+            }
+
+            return str;
+          }
+
+          const renderPlayer = function() {
+            player.innerText = `Inventory: ${inventoryString(state.player.inventory)}`
+          }
+
           const action = function(event, ids) {
             return function(_evt) {
               window.state = JSON.parse(GameLoop(event, ids.length, ...ids));
               renderRoom()
+              renderPlayer()
             }
           };
 
