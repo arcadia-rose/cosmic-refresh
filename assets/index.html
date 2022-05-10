@@ -23,6 +23,10 @@
             margin-top: 16px;
           }
 
+          div.hidden {
+            display: none;
+          }
+
           button {
             border: 1px solid black;
             background-color: white;
@@ -44,6 +48,17 @@
         <div id="notifications"></div>
         <div id="room">
           <div class="content"></div>
+          <div class="checkbox-array hidden">
+            <input type="checkbox" id="checkbox-0" />
+            <input type="checkbox" id="checkbox-1" />
+            <input type="checkbox" id="checkbox-2" />
+            <input type="checkbox" id="checkbox-3" />
+            <br>
+            <input type="checkbox" id="checkbox-4" />
+            <input type="checkbox" id="checkbox-5" />
+            <input type="checkbox" id="checkbox-6" />
+            <input type="checkbox" id="checkbox-7" />
+          </div>
         </div>
         <div id="player">
           <div class="content"></div>
@@ -55,6 +70,7 @@
         const render = function() {
           const notifications = document.querySelector("#ui > #notifications");
           const room = document.querySelector("#ui > #room > .content");
+          const checkboxArray = document.querySelector("#ui > #room > .checkbox-array");
           const player = document.querySelector("#ui > #player > .content");
           const actionsContainer = document.querySelector("#ui > #player > #actions");
 
@@ -63,6 +79,14 @@
             node.innerText = notification;
             notifications.appendChild(node);
           };
+
+          const displayCheckboxArray = function() {
+            checkboxArray.classList.remove("hidden")
+          }
+
+          const destroyCheckboxArray = function() {
+            checkboxArray.classList.add("hidden")
+          }
 
           const renderRoom = function() {
             room.innerText = state.currentRoom.description;
