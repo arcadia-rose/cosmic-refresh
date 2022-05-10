@@ -40,7 +40,9 @@ func MainEntrance() Room {
 func ShoeRoom() Room {
 	description := `The entrance is surprisingly spaceous.  To your right is a large rack for
   leaving one's shoes.  It's unlikely that a single living soul has been through here in some time
-  and the shoes left on the rack are tattered and falling to pieces.`
+  and the shoes left on the rack are tattered and falling to pieces.
+  
+  You can see there is a dark room to the right as you look down the hallway.`
 
 	actions := []Action{
 		{
@@ -57,7 +59,7 @@ func ShoeRoom() Room {
 		},
 		{
 			Do: EnterRoomEvt,
-			It: "Enter",
+			It: "Enter dark room",
 			To: Id(1002),
 			Is: RoomE,
 		},
