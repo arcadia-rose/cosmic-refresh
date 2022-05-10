@@ -1,6 +1,9 @@
 package game
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type Room struct {
 	Description string   `json:"description"`
@@ -50,6 +53,35 @@ func ShoeRoom() Room {
 		Description: description,
 		Items:       []Item{ItemRegistry[Id(1)]},
 		Actions:     actions,
+	}
+}
+
+func (r *Room) RemoveItem(item Item) {
+	// Produce a filtered copy of the inventory with the
+	// fetched item removed.
+	invCopy := []Item{}
+	for _, roomItem := range r.Items {
+		if item == roomItem {
+			continue
+		} else {
+			invCopy = append(invCopy, roomItem)
+		}
+	}
+
+	r.Items = invCopy
+	fmt.Printf("Items: %v\n", r.Items)
+
+	if len(r.Items) == 0 {
+		filteredActions := []Action{}
+		for _, action := range r.Actions {
+			if action.Do == CollectItemEvt {
+				continue
+			} else {
+				filteredActions = append(filteredActions, action)
+			}
+		}
+
+		r.Actions = filteredActions
 	}
 }
 

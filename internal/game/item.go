@@ -18,7 +18,10 @@ var ItemRegistry = map[Id]Item{
 
 func collectItem(state State, itemIds []Id) (State, *FlagSet, error) {
 	for _, itemId := range itemIds {
-		state.PlayerState.Inventory[itemId] = ItemRegistry[itemId]
+		item := ItemRegistry[itemId]
+		state.PlayerState.Inventory[itemId] = item
+
+		state.CurrentRoom.RemoveItem(item)
 	}
 
 	return state, nil, nil
