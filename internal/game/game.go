@@ -14,6 +14,7 @@ const (
 const (
 	ItemE Entity = 1
 	RoomE Entity = iota
+	FlagE Entity = iota
 )
 
 type Player struct {
@@ -25,6 +26,7 @@ type Player struct {
 type State struct {
 	PlayerState   Player
 	CurrentRoom   Room
+	Flags         map[Id]*Flag
 	EventHandlers map[Event]func(State, []Id) State
 }
 
@@ -40,13 +42,6 @@ func (s State) View() StateView {
 type StateView struct {
 	PlayerState Player `json:"player"`
 	CurrentRoom Room   `json:"currentRoom"`
-}
-
-func (s StateView) State() State {
-	newState := NewState()
-	newState.PlayerState = s.PlayerState
-	newState.CurrentRoom = s.CurrentRoom
-	return newState
 }
 
 func GameLoop(state State, event Event, ids []Id) State {
@@ -68,6 +63,7 @@ func NewState() State {
 	return State{
 		PlayerState: NewPlayer(),
 		CurrentRoom: MainEntrance(),
+		Flags:       FlagRegistry,
 		EventHandlers: map[Event]func(State, []Id) State{
 			CollectItemEvt: collectItem,
 			EnterRoomEvt:   enterRoom,
