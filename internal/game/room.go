@@ -16,6 +16,8 @@ var RoomRegistry = map[Id]Room{
 	Id(1000): MainEntrance(),
 	Id(1001): ShoeRoom(),
 	Id(1002): DarkRoom(),
+	Id(1003): LockedRoom(),
+	Id(1004): UnlockedRoom(),
 }
 
 func MainEntrance() Room {
@@ -87,10 +89,60 @@ func DarkRoom() Room {
 				To: Id(2001),
 				Is: FlagE,
 			},
+			{
+				Do: EnterRoomEvt,
+				It: "Enter left door",
+				To: Id(1003),
+				Is: RoomE,
+			},
+			{
+				Do: EnterRoomEvt,
+				It: "Enter right door",
+				To: Id(1004),
+				Is: RoomE,
+			},
 		},
 		Properties: map[string]bool{
 			"dark": true,
 		},
+	}
+}
+
+func LockedRoom() Room {
+	description := `Strangely ordinary-looking for a place that was hard to get into.`
+
+	return Room{
+		Description: description,
+		Items:       []Item{},
+		Actions: []Action{
+			{
+				Do: EnterRoomEvt,
+				It: "Exit",
+				To: Id(1002),
+				Is: RoomE,
+			},
+		},
+		Properties: map[string]bool{
+			"locked": true,
+		},
+	}
+}
+
+func UnlockedRoom() Room {
+	description := `Just your ordinary empty room.`
+
+	return Room{
+		Description: description,
+		Items:       []Item{},
+		Actions: []Action{
+			{
+				Do: EnterRoomEvt,
+				It: "Exit",
+				To: Id(1002),
+				Is: RoomE,
+			},
+		},
+		Properties: map[string]bool{},
 	}
 }
 
@@ -142,6 +194,10 @@ func enterRoom(state State, roomIds []Id) (State, *FlagSet, error) {
 	targetRoom := RoomRegistry[roomIds[0]]
 	if targetRoom.Properties["dark"] && !FlagRegistry[Id(2000)].Set {
 		state.Notifications = append(state.Notifications, "The room is too dark.  What would you even do when you got in there?")
+		return state, nil, nil
+	}
+	if targetRoom.Properties["locked"] && !state.PlayerState.HasKey() {
+		state.Notifications = append(state.Notifications, "The room is locked.  You need a key to get in.")
 		return state, nil, nil
 	}
 

@@ -23,6 +23,16 @@ type Player struct {
 	Inventory map[Id]Item `json:"inventory"`
 }
 
+func (p Player) HasKey() bool {
+	for itemId := range p.Inventory {
+		if itemId == Id(0) {
+			return true
+		}
+	}
+
+	return false
+}
+
 // Internal representation of the game state only usably on the Go side.
 type State struct {
 	PlayerState   Player
