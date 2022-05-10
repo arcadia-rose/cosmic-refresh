@@ -39,3 +39,15 @@ func collectItem(state State, itemIds []Id) (State, *FlagSet, error) {
 
 	return state, flagSet, nil
 }
+
+func useItems(state State, itemIds []Id) (State, *FlagSet, error) {
+	if len(itemIds) == 0 {
+		state.Notifications = append(state.Notifications, "How are you planning to use nothing?")
+	} else if len(itemIds) == 1 {
+		state.Notifications = append(state.Notifications, "You're not really sure how to use that.")
+	} else {
+		state.Notifications = append(state.Notifications, "You're not really sure how to use those together.")
+	}
+
+	return state, nil, nil
+}

@@ -64,6 +64,7 @@
           <div class="content"></div>
           <p>Inventory</p>
           <select multiple id="inventory"></select>
+          <button id="inventory-use" onclick="useItems()">Use</button>
           <div id="actions"></div>
         </div>
       </div>
@@ -134,6 +135,16 @@
               renderInventory()
             }
           };
+
+          window.useItems = function() {
+            const selected = inventory.selectedOptions;
+            let ids = [];
+            for (let i = 0; i < selected.length; i++) {
+              ids.push(parseInt(selected[i].value));
+            }
+
+            action("useItems", ids)();
+          }
 
           window.state = JSON.parse(NewState());
           renderRoom();

@@ -10,6 +10,7 @@ const (
 	CollectItemEvt = Event("collectItem")
 	EnterRoomEvt   = Event("enterRoom")
 	SearchEvt      = Event("search")
+	UseItemsEvt    = Event("useItems")
 )
 
 const (
