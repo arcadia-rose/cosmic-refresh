@@ -24,25 +24,30 @@ type Player struct {
 type State struct {
 	PlayerState   Player
 	CurrentRoom   Room
+	Notifications []string
 	Flags         map[Id]*Flag
 	EventHandlers map[Event]Handler
 }
 
 func (s State) View() StateView {
 	return StateView{
-		PlayerState: s.PlayerState,
-		CurrentRoom: s.CurrentRoom,
+		PlayerState:   s.PlayerState,
+		CurrentRoom:   s.CurrentRoom,
+		Notifications: s.Notifications,
 	}
 }
 
 // Shared representation of the game state meant to be communicated between JS & Go.
 // The non-serializable components of `State` must be reconstructed for internal use.
 type StateView struct {
-	PlayerState Player `json:"player"`
-	CurrentRoom Room   `json:"currentRoom"`
+	PlayerState   Player   `json:"player"`
+	CurrentRoom   Room     `json:"currentRoom"`
+	Notifications []string `json:"notifications"`
 }
 
 func GameLoop(state State, event Event, ids []Id) State {
+	state.Notifications = []string{}
+
 	handler, found := state.EventHandlers[event]
 	if found {
 		newState, flagToSet, _ := handler(state, ids)

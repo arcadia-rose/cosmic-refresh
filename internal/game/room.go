@@ -117,6 +117,7 @@ func enterRoom(state State, roomIds []Id) (State, *FlagSet, error) {
 
 	targetRoom := RoomRegistry[roomIds[0]]
 	if targetRoom.Properties["dark"] && !FlagRegistry[Id(2000)].Set {
+		state.Notifications = append(state.Notifications, "The room is too dark.  What would you even do when you got in there?")
 		return state, nil, nil
 	}
 

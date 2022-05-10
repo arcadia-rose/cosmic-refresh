@@ -11,6 +11,7 @@
     </head>
     <body>
       <div id="ui">
+        <div id="notifications"></div>
         <div id="room">
           <div class="content"></div>
         </div>
@@ -22,9 +23,16 @@
 
       <script>
         const render = function() {
+          const notifications = document.querySelector("#ui > #notifications");
           const room = document.querySelector("#ui > #room > .content");
           const player = document.querySelector("#ui > #player > .content");
           const actionsContainer = document.querySelector("#ui > #player > #actions");
+
+          const renderNotification = function(notification) {
+            const node = document.createElement("p");
+            node.innerText = notification;
+            notifications.appendChild(node);
+          };
 
           const renderRoom = function() {
             room.innerText = state.currentRoom.description;
@@ -65,6 +73,11 @@
           const action = function(event, ids) {
             return function(_evt) {
               window.state = JSON.parse(GameLoop(event, ids.length, ...ids));
+
+              for (const notification of state.notifications) {
+                renderNotification(notification);
+              }
+
               renderRoom()
               renderPlayer()
             }
