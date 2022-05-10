@@ -129,7 +129,12 @@ func LockedRoom() Room {
 }
 
 func UnlockedRoom() Room {
-	description := `Just your ordinary empty room.`
+	description := `Just your ordinary empty room.
+	On the far side of the wall is a bookshelf, mostly empty but featuring a scant two rows of books.
+	The titles seem strangely prosaic: a gardening book, a dry-looking biology textbook (at least a century out of date).
+	You can't imagine reading any of them.
+	Strangely, the spines are all facing away from you; you can't seem to make sense of why.
+	Beneath the books is a small wooden box, nondescript, with a tightly-fitted lid. There's no obvious lock, but it won't open.`
 
 	return Room{
 		Description: description,
