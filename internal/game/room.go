@@ -56,7 +56,7 @@ func ShoeRoom() Room {
 	}
 }
 
-func (r *Room) RemoveItem(item Item) {
+func (r *Room) RemoveItem(item Item, id Id) {
 	// Produce a filtered copy of the inventory with the
 	// fetched item removed.
 	invCopy := []Item{}
@@ -71,18 +71,16 @@ func (r *Room) RemoveItem(item Item) {
 	r.Items = invCopy
 	fmt.Printf("Items: %v\n", r.Items)
 
-	if len(r.Items) == 0 {
-		filteredActions := []Action{}
-		for _, action := range r.Actions {
-			if action.Do == CollectItemEvt {
-				continue
-			} else {
-				filteredActions = append(filteredActions, action)
-			}
+	filteredActions := []Action{}
+	for _, action := range r.Actions {
+		if action.Do == CollectItemEvt && action.To == id {
+			continue
+		} else {
+			filteredActions = append(filteredActions, action)
 		}
-
-		r.Actions = filteredActions
 	}
+
+	r.Actions = filteredActions
 }
 
 func enterRoom(state State, roomIds []Id) (State, *FlagSet, error) {

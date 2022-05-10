@@ -21,7 +21,7 @@ func collectItem(state State, itemIds []Id) (State, *FlagSet, error) {
 		item := ItemRegistry[itemId]
 		state.PlayerState.Inventory[itemId] = item
 
-		state.CurrentRoom.RemoveItem(item)
+		state.CurrentRoom.RemoveItem(item, itemId)
 	}
 
 	return state, nil, nil
