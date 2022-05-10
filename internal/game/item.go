@@ -21,12 +21,21 @@ var ItemRegistry = map[Id]Item{
 }
 
 func collectItem(state State, itemIds []Id) (State, *FlagSet, error) {
+	var flagSet *FlagSet = nil
+
 	for _, itemId := range itemIds {
 		item := ItemRegistry[itemId]
 		state.PlayerState.Inventory[itemId] = item
 
+		if itemId == Id(2) { // lol
+			flagSet = &FlagSet{
+				FlagId:   Id(2000),
+				NewValue: true,
+			}
+		}
+
 		state.CurrentRoom.RemoveItem(item, itemId)
 	}
 
-	return state, nil, nil
+	return state, flagSet, nil
 }
