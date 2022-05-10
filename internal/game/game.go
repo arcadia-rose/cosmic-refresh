@@ -2,8 +2,6 @@ package game
 
 type Id uint
 
-type Event string
-
 type Entity uint
 
 const (
@@ -27,7 +25,7 @@ type State struct {
 	PlayerState   Player
 	CurrentRoom   Room
 	Flags         map[Id]*Flag
-	EventHandlers map[Event]func(State, []Id) State
+	EventHandlers map[Event]Handler
 }
 
 func (s State) View() StateView {
@@ -47,7 +45,13 @@ type StateView struct {
 func GameLoop(state State, event Event, ids []Id) State {
 	handler, found := state.EventHandlers[event]
 	if found {
-		return handler(state, ids)
+		newState, flagToSet, _ := handler(state, ids)
+
+		if flagToSet != nil {
+			newState.Flags[flagToSet.FlagId].Set = flagToSet.NewValue
+		}
+
+		state = newState
 	}
 	return state
 }
@@ -61,12 +65,9 @@ func NewPlayer() Player {
 
 func NewState() State {
 	return State{
-		PlayerState: NewPlayer(),
-		CurrentRoom: MainEntrance(),
-		Flags:       FlagRegistry,
-		EventHandlers: map[Event]func(State, []Id) State{
-			CollectItemEvt: collectItem,
-			EnterRoomEvt:   enterRoom,
-		},
+		PlayerState:   NewPlayer(),
+		CurrentRoom:   MainEntrance(),
+		Flags:         FlagRegistry,
+		EventHandlers: EventsRegistry,
 	}
 }

@@ -1,5 +1,7 @@
 package game
 
+import "errors"
+
 type Room struct {
 	Description string   `json:"description"`
 	Items       []Item   `json:"items"`
@@ -51,11 +53,11 @@ func ShoeRoom() Room {
 	}
 }
 
-func enterRoom(state State, roomIds []Id) State {
+func enterRoom(state State, roomIds []Id) (State, *FlagSet, error) {
 	if len(roomIds) != 1 {
-		return state
+		return state, nil, errors.New("No room ID specified.")
 	}
 
 	state.CurrentRoom = RoomRegistry[roomIds[0]]
-	return state
+	return state, nil, nil
 }

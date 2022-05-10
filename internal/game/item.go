@@ -16,10 +16,10 @@ var ItemRegistry = map[Id]Item{
 	},
 }
 
-func collectItem(state State, itemIds []Id) State {
+func collectItem(state State, itemIds []Id) (State, *FlagSet, error) {
 	for _, itemId := range itemIds {
 		state.PlayerState.Inventory[itemId] = ItemRegistry[itemId]
 	}
 
-	return state
+	return state, nil, nil
 }
