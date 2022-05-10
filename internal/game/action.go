@@ -19,4 +19,5 @@ type Handler func(State, []Id) (State, *FlagSet, error)
 var EventsRegistry = map[Event]Handler{
 	CollectItemEvt: collectItem,
 	EnterRoomEvt:   enterRoom,
+	SearchEvt:      search,
 }

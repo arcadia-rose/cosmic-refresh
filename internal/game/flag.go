@@ -1,5 +1,7 @@
 package game
 
+import "fmt"
+
 type Flag struct {
 	Description string
 	Set         bool
@@ -7,6 +9,7 @@ type Flag struct {
 
 var FlagRegistry = map[Id]*Flag{
 	Id(2000): HaveLightSource(),
+	Id(2001): ItemDiscoverable(),
 }
 
 func HaveLightSource() *Flag {
@@ -16,7 +19,24 @@ func HaveLightSource() *Flag {
 	return f
 }
 
+func ItemDiscoverable() *Flag {
+	f := new(Flag)
+	f.Description = "Some items can only be revealed once the player has fulfilled some condition."
+	f.Set = false
+	return f
+}
+
 func ObtainLightSource(state State, _ids []Id) State {
 	state.Flags[Id(2000)].Set = true
+	return state
+}
+
+func ToggleItemDiscoverability(state State, ids []Id) State {
+	fmt.Printf("Discovered %v\n", ids)
+	if len(ids) != 1 {
+		return state
+	}
+
+	state.Flags[ids[0]].Set = !state.Flags[ids[0]].Set
 	return state
 }

@@ -2,6 +2,7 @@ package game
 
 import (
 	"errors"
+	"fmt"
 )
 
 type Room struct {
@@ -79,11 +80,41 @@ func DarkRoom() Room {
 	return Room{
 		Description: description,
 		Items:       []Item{},
-		Actions:     []Action{},
+		Actions: []Action{
+			{
+				Do: SearchEvt,
+				It: "Search desk",
+				To: Id(2001),
+				Is: FlagE,
+			},
+		},
 		Properties: map[string]bool{
 			"dark": true,
 		},
 	}
+}
+
+func (r *Room) AppendDescription(desc string) {
+	r.Description += "\n" + desc
+}
+
+func (r *Room) AddAction(action Action) {
+	r.Actions = append(r.Actions, action)
+}
+
+func (r *Room) RemoveAction(event Event, target Id) {
+	filteredActions := []Action{}
+	for _, action := range r.Actions {
+		if action.Do == event && action.To == target {
+			fmt.Printf("Removing %s targetting %d\n", event, target)
+			continue
+		} else {
+			filteredActions = append(filteredActions, action)
+		}
+	}
+
+	r.Actions = filteredActions
+	fmt.Printf("%d actions left", len(r.Actions))
 }
 
 func (r *Room) RemoveItem(item Item, id Id) {
@@ -100,16 +131,7 @@ func (r *Room) RemoveItem(item Item, id Id) {
 
 	r.Items = invCopy
 
-	filteredActions := []Action{}
-	for _, action := range r.Actions {
-		if action.Do == CollectItemEvt && action.To == id {
-			continue
-		} else {
-			filteredActions = append(filteredActions, action)
-		}
-	}
-
-	r.Actions = filteredActions
+	r.RemoveAction(CollectItemEvt, id)
 }
 
 func enterRoom(state State, roomIds []Id) (State, *FlagSet, error) {
@@ -124,5 +146,25 @@ func enterRoom(state State, roomIds []Id) (State, *FlagSet, error) {
 	}
 
 	state.CurrentRoom = RoomRegistry[roomIds[0]]
+	return state, nil, nil
+}
+
+func search(state State, ids []Id) (State, *FlagSet, error) {
+	fmt.Printf("Searching %v\n", ids)
+
+	state = ToggleItemDiscoverability(state, ids)
+
+	for _, id := range ids {
+		state.CurrentRoom.RemoveAction(SearchEvt, id)
+	}
+
+	state.CurrentRoom.AppendDescription(`You search the desk and find a key.`)
+	state.CurrentRoom.AddAction(Action{
+		Do: CollectItemEvt,
+		It: "Take key",
+		To: Id(0),
+		Is: ItemE,
+	})
+
 	return state, nil, nil
 }

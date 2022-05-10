@@ -1,5 +1,7 @@
 package game
 
+import "fmt"
+
 type Id uint
 
 type Entity uint
@@ -7,6 +9,7 @@ type Entity uint
 const (
 	CollectItemEvt = Event("collectItem")
 	EnterRoomEvt   = Event("enterRoom")
+	SearchEvt      = Event("search")
 )
 
 const (
@@ -58,6 +61,8 @@ func GameLoop(state State, event Event, ids []Id) State {
 
 		state = newState
 	}
+
+	fmt.Printf("Room has %d actions available\n", len(state.CurrentRoom.Actions))
 	return state
 }
 
