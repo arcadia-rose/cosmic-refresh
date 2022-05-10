@@ -96,6 +96,7 @@
             return function(_evt) {
               window.state = JSON.parse(GameLoop(event, ids.length, ...ids));
 
+              notifications.innerHTML = '';
               for (const notification of state.notifications) {
                 renderNotification(notification);
               }
