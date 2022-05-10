@@ -1,6 +1,28 @@
 <html>  
     <head>
         <meta charset="utf-8"/>
+        <style>
+          div#ui > div {
+            margin-bottom: 16px;
+          }
+
+          div#ui > div#notifications {
+            color: darkred;
+          }
+
+          div#ui > div#notifications > p:last-child {
+            border-bottom: 1px solid darkblue;
+          }
+
+          div#ui > div#player {
+            padding: 8px;
+            border: 1px solid black;
+          }
+
+          div#ui > div#player > div#actions {
+            margin-top: 16px;
+          }
+        </style>
         <script src="wasm_exec.js"></script>
         <script>
             const go = new Go();
@@ -56,7 +78,7 @@
                 str += ', ';
               }
 
-              str += `${item.name} (${item.description})`;
+              str += `\n- ${item.name}: ${item.description}`;
             }
             
             if (str.length === 0) {
