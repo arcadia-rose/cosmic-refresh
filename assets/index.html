@@ -16,7 +16,7 @@
         </div>
         <div id="player">
           <div class="content"></div>
-          <button id="pick-up" onclick="Act('collectItem', [0])">Pick up item</button>
+          <div id="actions"></div>
         </div>
       </div>
 
@@ -24,15 +24,31 @@
         const render = function() {
           const room = document.querySelector("#ui > #room > .content");
           const player = document.querySelector("#ui > #player > .content");
+          const actionsContainer = document.querySelector("#ui > #player > #actions");
+
+          const renderRoom = function() {
+            room.innerText = state.currentRoom.description;
+
+            actionsContainer.innerHTML = '';
+
+            for (const act of state.currentRoom.actions) {
+              let button = document.createElement("button");
+              button.textContent = act.it;
+              button.onclick = action(act.do, [act.to]);
+
+              actionsContainer.appendChild(button);
+            }
+          };
+
+          const action = function(event, ids) {
+            return function(_evt) {
+              window.state = JSON.parse(GameLoop(event, ids.length, ...ids));
+              renderRoom()
+            }
+          };
 
           window.state = JSON.parse(NewState());
-
-          window.Act = function(event, ids) {
-            window.state = JSON.parse(GameLoop(event, ids.length, ...ids));
-            player.innerText = `Number of items in inventory: ${Object.keys(state.player.inventory).length}`;
-          }
-
-          player.innerText = `Number of items in inventory: ${Object.keys(state.player.inventory).length}`;
+          renderRoom();
         }
 
         setTimeout(render, 250)
