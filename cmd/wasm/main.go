@@ -1,7 +1,7 @@
 package main
 
 import (
-  "encoding/json"
+	"encoding/json"
 	"syscall/js"
 
 	"github.com/arcadia-rose/shopify-hackdays-march-2022/internal/game"
@@ -10,16 +10,16 @@ import (
 var State game.State
 
 func stateAsJSON() string {
-  view := State.View()
-  encoded, _ := json.Marshal(view)
-  return string(encoded)
+	view := State.View()
+	encoded, _ := json.Marshal(view)
+	return string(encoded)
 }
 
 func NewState() js.Func {
 	return js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		State = game.NewState()
-		
-    return stateAsJSON()
+
+		return stateAsJSON()
 	})
 }
 

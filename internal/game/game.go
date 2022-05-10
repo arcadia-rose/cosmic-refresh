@@ -7,64 +7,64 @@ type Event string
 type Entity uint
 
 const (
-  CollectItemEvt = Event("collectItem")
-  EnterRoomEvt   = Event("enterRoom")
+	CollectItemEvt = Event("collectItem")
+	EnterRoomEvt   = Event("enterRoom")
 )
 
 const (
-  ItemE Entity = 1
-  RoomE Entity = iota
+	ItemE Entity = 1
+	RoomE Entity = iota
 )
 
 type Action struct {
-  Do Event  `json:"do"`
-  It string `json:"it"`
-  To Id     `json:"to"`
-  Is Entity `json:"is"`
+	Do Event  `json:"do"`
+	It string `json:"it"`
+	To Id     `json:"to"`
+	Is Entity `json:"is"`
 }
 
 type Room struct {
-  Description string   `json:"description"`
-  Items       []Item   `json:"items"`
-  Actions     []Action `json:"actions"`
+	Description string   `json:"description"`
+	Items       []Item   `json:"items"`
+	Actions     []Action `json:"actions"`
 }
 
 type Item struct {
-  Name   string `json:"name"`
-  Amount uint   `json:"amount"`
+	Name   string `json:"name"`
+	Amount uint   `json:"amount"`
 }
 
 type Player struct {
-  Insight   uint        `json:"insight"`
-  Inventory map[Id]Item `json:"inventory"`
+	Insight   uint        `json:"insight"`
+	Inventory map[Id]Item `json:"inventory"`
 }
 
 // Internal representation of the game state only usably on the Go side.
 type State struct {
 	PlayerState   Player
-  CurrentRoom   Room
+	CurrentRoom   Room
 	EventHandlers map[Event]func(State, []Id) State
 }
 
 func (s State) View() StateView {
-  return StateView {
-    PlayerState: s.PlayerState,
-    CurrentRoom: s.CurrentRoom,
-  }
+	return StateView{
+		PlayerState: s.PlayerState,
+		CurrentRoom: s.CurrentRoom,
+	}
 }
 
 // Shared representation of the game state meant to be communicated between JS & Go.
 // The non-serializable components of `State` must be reconstructed for internal use.
 type StateView struct {
-  PlayerState Player `json:"player"`
-  CurrentRoom Room   `json:"currentRoom"`
+	PlayerState Player `json:"player"`
+	CurrentRoom Room   `json:"currentRoom"`
 }
 
 func (s StateView) State() State {
-  newState := NewState()
-  newState.PlayerState = s.PlayerState
-  newState.CurrentRoom = s.CurrentRoom
-  return newState
+	newState := NewState()
+	newState.PlayerState = s.PlayerState
+	newState.CurrentRoom = s.CurrentRoom
+	return newState
 }
 
 var ItemRegistry = map[Id]Item{
@@ -75,39 +75,39 @@ var ItemRegistry = map[Id]Item{
 }
 
 var RoomRegistry = map[Id]Room{
-  Id(1000): MainEntrance(),
-  Id(1001): ShoeRoom(),
+	Id(1000): MainEntrance(),
+	Id(1001): ShoeRoom(),
 }
 
 func MainEntrance() Room {
-  description := `You approach a big spooky door!`
+	description := `You approach a big spooky door!`
 
-  actions := []Action{
-    {
-      Do: EnterRoomEvt,
-      It: "Enter",
-      To: Id(1001),
-      Is: RoomE,
-    },
-  }
+	actions := []Action{
+		{
+			Do: EnterRoomEvt,
+			It: "Enter",
+			To: Id(1001),
+			Is: RoomE,
+		},
+	}
 
-  return Room {
-    Description: description,
-    Items: []Item{},
-    Actions: actions,
-  }
+	return Room{
+		Description: description,
+		Items:       []Item{},
+		Actions:     actions,
+	}
 }
 
 func ShoeRoom() Room {
-  description := `The entrance is surprisingly spaceous.  To your right is a large rack for
+	description := `The entrance is surprisingly spaceous.  To your right is a large rack for
   leaving one's shoes.  It's unlikely that a single living soul has been through here in some time
   and the shoes left on the rack are tattered and falling to pieces.`
 
-  return Room {
-    Description: description,
-    Items: []Item{},
-    Actions: []Action{},
-  }
+	return Room{
+		Description: description,
+		Items:       []Item{},
+		Actions:     []Action{},
+	}
 }
 
 func GameLoop(state State, event Event, ids []Id) State {
@@ -128,10 +128,10 @@ func NewPlayer() Player {
 func NewState() State {
 	return State{
 		PlayerState: NewPlayer(),
-    CurrentRoom: MainEntrance(),
+		CurrentRoom: MainEntrance(),
 		EventHandlers: map[Event]func(State, []Id) State{
 			CollectItemEvt: collectItem,
-      EnterRoomEvt: enterRoom,
+			EnterRoomEvt:   enterRoom,
 		},
 	}
 }
@@ -145,10 +145,10 @@ func collectItem(state State, itemIds []Id) State {
 }
 
 func enterRoom(state State, roomIds []Id) State {
-  if len(roomIds) != 1 {
-    return state
-  }
+	if len(roomIds) != 1 {
+		return state
+	}
 
-  state.CurrentRoom = RoomRegistry[roomIds[0]]
-  return state
+	state.CurrentRoom = RoomRegistry[roomIds[0]]
+	return state
 }
