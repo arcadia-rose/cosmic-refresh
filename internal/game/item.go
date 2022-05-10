@@ -14,6 +14,10 @@ var ItemRegistry = map[Id]Item{
 		Name:        "Shoe",
 		Description: "Disgusting. Don't put this on.",
 	},
+	Id(2): {
+		Name:        "Candlestick",
+		Description: `A candlestick. The candle has burned most of the way down, but it's still lit for now. You wonder, why was it lit in the first place?`,
+	},
 }
 
 func collectItem(state State, itemIds []Id) (State, *FlagSet, error) {

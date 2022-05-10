@@ -43,15 +43,21 @@ func ShoeRoom() Room {
 	actions := []Action{
 		{
 			Do: CollectItemEvt,
-			It: "Take",
+			It: "Take shoe",
 			To: Id(1),
+			Is: ItemE,
+		},
+		{
+			Do: CollectItemEvt,
+			It: "Take candlestick",
+			To: Id(2),
 			Is: ItemE,
 		},
 	}
 
 	return Room{
 		Description: description,
-		Items:       []Item{ItemRegistry[Id(1)]},
+		Items:       []Item{ItemRegistry[Id(1)], ItemRegistry[Id(2)]},
 		Actions:     actions,
 	}
 }
