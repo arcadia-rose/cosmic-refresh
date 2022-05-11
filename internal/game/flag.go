@@ -15,6 +15,15 @@ var FlagRegistry = map[Id]*Flag{
 	Id(2004): ReadPage1(),
 }
 
+func BoolMap(f map[Id]*Flag) map[Id]bool {
+	m := make(map[Id]bool)
+	for k, v := range f {
+		m[k] = v.Set
+	}
+
+	return m
+}
+
 func HaveLightSource() *Flag {
 	f := new(Flag)
 	f.Description = "A light source is required to activate dark rooms."

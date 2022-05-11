@@ -178,9 +178,11 @@ func useItems(state State, itemIds []Id) (State, *FlagSet, error) {
 	foundUse := false
 
 	var flagSet *FlagSet
-	var result string
 	for _, interaction := range ItemInteractions {
-		result, flagSet = interaction(itemIds)
+		result, flagFound := interaction(itemIds)
+		if flagFound != nil {
+			flagSet = flagFound
+		}
 
 		if result != "" {
 			state.Notifications = append(state.Notifications, result)
