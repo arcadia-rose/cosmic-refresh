@@ -254,7 +254,7 @@ func UnlockedRoom(state State) Room {
 			},
 		},
 		Properties: map[string]bool{
-			"checkboxes": true,
+			"checkboxes": !state.Flags[Id(2002)].Set,
 		},
 	}.Prepare(state)
 }
