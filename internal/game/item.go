@@ -36,6 +36,10 @@ var ItemRegistry = map[Id]Item{
 		Name:        "Book with a caduceus",
 		Description: `Some sort of book of folk remedies. Looks like several pages have been torn out.`,
 	},
+	Id(7): {
+		Name:        "Magnifying glass",
+		Description: `A normal-looking magnifying glass with a hand-carved wooden handle.`,
+	},
 }
 
 func collectItem(state State, itemIds []Id) (State, *FlagSet, error) {

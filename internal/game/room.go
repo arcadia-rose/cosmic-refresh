@@ -20,6 +20,7 @@ func RoomRegistry(state State) map[Id]Room {
 		Id(1003): LockedRoom(),
 		Id(1004): UnlockedRoom(),
 		Id(1005): Parlour(),
+		Id(1006): Study(),
 	}
 }
 
@@ -89,7 +90,9 @@ func ShoeRoom() Room {
 func Parlour() Room {
 	description := `Some kind of parlour. Altogether a little too homey for this place.
 	A chair sits against a wall, with a small end table next to it. The wall behind it looks unstable - you wouldn't like to sit there too long.
-	A few books are strewn on the end table, left there by someone who isn't terribly careful with their possessions when they're done with them.`
+	A few books are strewn on the end table, left there by someone who isn't terribly careful with their possessions when they're done with them.
+	
+	To your right is a beautiful, large wooden door that has been left completely ajar.  You can see that it leads to a study.`
 
 	return Room{
 		Description: description,
@@ -107,8 +110,55 @@ func Parlour() Room {
 				To: Id(5),
 				Is: ItemE,
 			},
+			{
+				Do: EnterRoomEvt,
+				It: "Enter study",
+				To: Id(1006),
+				Is: RoomE,
+			},
 		},
 		Properties: map[string]bool{},
+	}
+}
+
+func Study() Room {
+	description := `A study with a surprising air of grandiosity in spite of its relatively small size.
+	It has an eclectic quality about it with various trinkets and knick-knacks on the shelves and desk.
+	
+	Approaching the desk, you realize that the room must have been in use fairly recently.
+	There's a strange, worn-out book with a detailed leather binding on the desk and what you can only
+	describe as a pattern resembling a snake in the shape of the letter Z on the cover.
+	
+	Next to the book is a beautiful magnifying glass.  With a wooden handle that must have been hand-carved,
+	there isn't anything about it that would immediately make you think it any more than a standard magnifying
+	glass.  Somehow, though, you find it difficult to avert your gaze from the glimmer of the lens.`
+
+	return Room{
+		Description: description,
+		Items: []Item{
+			ItemRegistry[Id(4)],
+			ItemRegistry[Id(7)],
+		},
+		Actions: []Action{
+			{
+				Do: CollectItemEvt,
+				It: "Take book",
+				To: Id(4),
+				Is: ItemE,
+			},
+			{
+				Do: CollectItemEvt,
+				It: "Take magnifying glass",
+				To: Id(7),
+				Is: ItemE,
+			},
+			{
+				Do: EnterRoomEvt,
+				It: "Exit",
+				To: Id(1005),
+				Is: RoomE,
+			},
+		},
 	}
 }
 
