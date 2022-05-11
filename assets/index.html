@@ -23,10 +23,21 @@
             margin-top: 16px;
           }
 
+          div#ui > div#player > div > select#inventory {
+            padding: 16px;
+          }
+
+          div#ui > div#player > div > div#itemDescription {
+            padding: 24px;
+            margin-top: 8px;
+            border: 1px solid black;
+            max-width: 70%;
+          }
+
           .hidden {
             display: none;
           }
-
+          
           button {
             border: 1px solid black;
             background-color: white;
@@ -65,7 +76,10 @@
         <div id="player">
           <div class="content"></div>
           <p>Inventory</p>
-          <select multiple class="hidden" id="inventory"></select>
+          <div>
+            <select multiple class="hidden" id="inventory" onchange="describeSelectedItems()"></select>
+            <div class="hidden" id="itemDescription"></div>
+          </div>
           <div id="actions"></div>
         </div>
       </div>
@@ -76,7 +90,8 @@
           const room = document.querySelector("#ui > #room > .content");
           const checkboxArray = document.querySelector("#ui > #room > .checkbox-array");
           const player = document.querySelector("#ui > #player > .content");
-          const inventory = document.querySelector("#ui > #player > #inventory");
+          const inventory = document.querySelector("#ui > #player > div > #inventory");
+          const itemDescription = document.querySelector("#ui > #player > div > #itemDescription");
           const actionsContainer = document.querySelector("#ui > #player > #actions");
 
           const renderNotification = function(notification) {
@@ -119,6 +134,8 @@
 
           const renderInventory = function() {
             inventory.innerText = '';
+            itemDescription.innerText = '';
+            itemDescription.classList.add("hidden");
 
             if (Object.keys(state.player.inventory).length == 0) {
               inventory.classList.add("hidden")
@@ -131,7 +148,8 @@
             for (let [id, item] of Object.entries(state.player.inventory)) {
               let option = document.createElement("option");
               option.value = id;
-              option.innerText = `${item.name}: ${item.description}`;
+              option.innerText = item.name;
+              option.setAttribute('data-description', item.description);
               inventory.appendChild(option);
             }
           }
@@ -163,6 +181,19 @@
             btn.onclick = action("useItems", ids);
 
             return btn;
+          }
+
+          window.describeSelectedItems = function() {
+            itemDescription.classList.add("hidden");
+
+            const items = Array.prototype.slice.call(inventory.selectedOptions);
+            const selected = items.filter((option) => option.selected)
+            const descriptions = selected.map((option) => option.getAttribute("data-description"));
+
+            if (descriptions.length > 0) {
+              itemDescription.classList.remove("hidden");
+              itemDescription.innerText = descriptions.join("\n\n");
+            }
           }
 
           window.openBox = function() {
