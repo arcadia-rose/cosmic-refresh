@@ -123,7 +123,14 @@ func openBox(state State, flags []Id) (State, *FlagSet, error) {
 
 	var flagSet *FlagSet = nil
 
-	if reflect.DeepEqual(flags, CheckboxSolution) {
+	solutionCorrect := reflect.DeepEqual(flags, CheckboxSolution)
+
+	_, haveBook1 := state.PlayerState.Inventory[Id(3)]
+	_, haveBook2 := state.PlayerState.Inventory[Id(4)]
+	_, haveBook3 := state.PlayerState.Inventory[Id(5)]
+	_, haveBook4 := state.PlayerState.Inventory[Id(6)]
+
+	if haveBook1 && haveBook2 && haveBook3 && haveBook4 && solutionCorrect {
 		state.Notifications = append(
 			state.Notifications,
 			`The lid of the box pops open with a satisfying clink. Inside, you find a page that appears to have been torn from a book.
