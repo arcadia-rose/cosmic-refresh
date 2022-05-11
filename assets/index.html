@@ -169,16 +169,18 @@
           };
 
           const useItemsAction = function() {
-            const selected = inventory.selectedOptions;
-
-            let ids = [];
-            for (let i = 0; i < selected.length; i++) {
-              ids.push(parseInt(selected[i].value));
-            }
-
             const btn = document.createElement("button");
             btn.textContent = "Use item(s)";
-            btn.onclick = action("useItems", ids);
+            btn.onclick = function() {
+              const selected = inventory.selectedOptions;
+
+              let ids = [];
+              for (let i = 0; i < selected.length; i++) {
+                console.log("going to use item", selected[i].value);
+                ids.push(parseInt(selected[i].value));
+              }
+              action("useItems", ids)();
+            }
 
             return btn;
           }
@@ -186,8 +188,7 @@
           window.describeSelectedItems = function() {
             itemDescription.classList.add("hidden");
 
-            const items = Array.prototype.slice.call(inventory.selectedOptions);
-            const selected = items.filter((option) => option.selected)
+            const selected = Array.prototype.slice.call(inventory.selectedOptions);
             const descriptions = selected.map((option) => option.getAttribute("data-description"));
 
             if (descriptions.length > 0) {
