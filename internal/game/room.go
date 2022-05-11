@@ -182,6 +182,12 @@ func DarkRoom(state State) Room {
 				To: Id(1004),
 				Is: RoomE,
 			},
+			{
+				Do: EnterRoomEvt,
+				It: "Exit",
+				To: Id(1001),
+				Is: RoomE,
+			},
 		},
 		Properties: map[string]bool{
 			"dark": true,
