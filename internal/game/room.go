@@ -21,6 +21,7 @@ func RoomRegistry(state State) map[Id]Room {
 		Id(1004): UnlockedRoom(state),
 		Id(1005): Parlour(state),
 		Id(1006): Study(state),
+		Id(1007): SecretRoom(state),
 	}
 }
 
@@ -262,6 +263,20 @@ func UnlockedRoom(state State) Room {
 		Properties: map[string]bool{
 			"checkboxes": !state.Flags[Id(2002)].Set,
 		},
+	}.Prepare(state)
+}
+
+func SecretRoom(state State) Room {
+	description := `Surprisingly clean and tidy for a room that was locked behind a hastily-built wall. Seems like it wasn't actually sealed away all that long ago.
+	One wall is lined with bookshelves, but the books themselves are missing.
+	The front part of the room has a table covered with some equipment you don't understand terribly well, a pair of small vials, and a few sheets of paper. Looks like someone's been hard at work in here.
+	The chair at the table looks a lot less comfortable than the one in the room you just came from. Seems like this was a room for work, not for rest.`
+
+	return Room{
+		Description: description,
+		Items:       []Item{},
+		Actions:     []Action{},
+		Properties:  map[string]bool{},
 	}.Prepare(state)
 }
 

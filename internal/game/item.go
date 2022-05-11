@@ -46,14 +46,24 @@ var ItemRegistry = map[Id]Item{
 		Description: `A normal-looking magnifying glass with a hand-carved wooden handle.`,
 	},
 	Id(8): {
-		Name:        "Page 1 of caduceus book",
+		Name:        "Page 3 of caduceus book",
 		Description: `Describes medicines, elixirs and illnesses with strange symptoms...`,
+	},
+	Id(9): {
+		Name:        "Page 1 of caduceus book",
+		Description: `Filled with complex diagrams. Next to a basic biological study of human anatomy, you see a strangely occult symbol you don't recognize.`,
+	},
+	Id(10): {
+		Name:        "Page 2 of caduceus book",
+		Description: `An anatomical study of a squid. At least, you think it's a squid, but some of these body parts look off to you...`,
 	},
 }
 
 var ItemInteractions = []func([]Id) (string, *FlagSet){
 	MagnifyCaduceusBook,
+	MagnifyCaduceusPage3,
 	MagnifyCaduceusPage1,
+	MagnifyCaduceusPage2,
 }
 
 func MagnifyCaduceusBook(items []Id) (string, *FlagSet) {
@@ -76,7 +86,7 @@ func MagnifyCaduceusBook(items []Id) (string, *FlagSet) {
 	return "", nil
 }
 
-func MagnifyCaduceusPage1(items []Id) (string, *FlagSet) {
+func MagnifyCaduceusPage3(items []Id) (string, *FlagSet) {
 	foundMag := false
 	foundPage := false
 
@@ -95,6 +105,46 @@ func MagnifyCaduceusPage1(items []Id) (string, *FlagSet) {
 			NewValue: true,
 		}
 		return `New words appear on the page that you can't perceive without it, hastily scribbled by someone who seemed to be in a great hurry. It says, "What I sealed up behind that parlour needs to stay forgotten. Whatever you do, don't let me go back there."`, flagSet
+	}
+
+	return "", nil
+}
+
+func MagnifyCaduceusPage1(items []Id) (string, *FlagSet) {
+	foundMag := false
+	foundPage := false
+
+	for _, id := range items {
+		if id == Id(7) {
+			foundMag = true
+		}
+		if id == Id(9) {
+			foundPage = true
+		}
+	}
+
+	if foundMag && foundPage {
+		return `The entire page fills with tightly-packed words documenting the process of finding and communicating with - something. You're not sure what. It describes moonlit rituals, strange contortions that you struggle to picture in your mind's eye. The notes are detailed, as though the writer had already tried many of them.`, nil
+	}
+
+	return "", nil
+}
+
+func MagnifyCaduceusPage2(items []Id) (string, *FlagSet) {
+	foundMag := false
+	foundPage := false
+
+	for _, id := range items {
+		if id == Id(7) {
+			foundMag = true
+		}
+		if id == Id(10) {
+			foundPage = true
+		}
+	}
+
+	if foundMag && foundPage {
+		return `What looked before like an anatomical diagram now seems more like the template for a contract, with the diagram itself forming one party's signature. The rest of the contract is already filled out, and a neat hand has signed the other side of the form with your name.`, nil
 	}
 
 	return "", nil
