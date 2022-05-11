@@ -11,6 +11,7 @@ var FlagRegistry = map[Id]*Flag{
 	Id(2000): HaveLightSource(),
 	Id(2001): ItemDiscoverable(),
 	Id(2002): BookPuzzleSolved(),
+	Id(2003): SecretRoomDiscovered(),
 }
 
 func HaveLightSource() *Flag {
@@ -30,6 +31,13 @@ func ItemDiscoverable() *Flag {
 func BookPuzzleSolved() *Flag {
 	f := new(Flag)
 	f.Description = "The player has solved the book puzzle."
+	f.Set = false
+	return f
+}
+
+func SecretRoomDiscovered() *Flag {
+	f := new(Flag)
+	f.Description = "The player knows of the secret room behind the parlour"
 	f.Set = false
 	return f
 }

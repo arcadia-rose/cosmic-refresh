@@ -51,11 +51,12 @@ var ItemRegistry = map[Id]Item{
 	},
 }
 
-var ItemInteractions = []func([]Id) string{
+var ItemInteractions = []func([]Id) (string, *FlagSet){
 	MagnifyCaduceusBook,
+	MagnifyCaduceusPage1,
 }
 
-func MagnifyCaduceusBook(items []Id) string {
+func MagnifyCaduceusBook(items []Id) (string, *FlagSet) {
 	foundMag := false
 	foundBook := false
 
@@ -69,10 +70,34 @@ func MagnifyCaduceusBook(items []Id) string {
 	}
 
 	if foundMag && foundBook {
-		return `The words in the book appear larger, clearer, sharper... more profound.`
+		return `The words in the book appear larger, clearer, sharper... more profound.`, nil
 	}
 
-	return ""
+	return "", nil
+}
+
+func MagnifyCaduceusPage1(items []Id) (string, *FlagSet) {
+	foundMag := false
+	foundPage := false
+
+	for _, id := range items {
+		if id == Id(7) {
+			foundMag = true
+		}
+		if id == Id(8) {
+			foundPage = true
+		}
+	}
+
+	if foundMag && foundPage {
+		flagSet := &FlagSet{
+			FlagId:   Id(2003),
+			NewValue: true,
+		}
+		return `New words appear on the page that you can't perceive without it, hastily scribbled by someone who seemed to be in a great hurry. It says, "What I sealed up behind that parlour needs to stay forgotten. Whatever you do, don't let me go back there."`, flagSet
+	}
+
+	return "", nil
 }
 
 func collectItem(state State, itemIds []Id) (State, *FlagSet, error) {
@@ -98,8 +123,10 @@ func collectItem(state State, itemIds []Id) (State, *FlagSet, error) {
 func useItems(state State, itemIds []Id) (State, *FlagSet, error) {
 	foundUse := false
 
+	var flagSet *FlagSet
+	var result string
 	for _, interaction := range ItemInteractions {
-		result := interaction(itemIds)
+		result, flagSet = interaction(itemIds)
 
 		if result != "" {
 			state.Notifications = append(state.Notifications, result)
@@ -115,7 +142,7 @@ func useItems(state State, itemIds []Id) (State, *FlagSet, error) {
 		state.Notifications = append(state.Notifications, "You're not really sure how to use those together.")
 	}
 
-	return state, nil, nil
+	return state, flagSet, nil
 }
 
 func openBox(state State, flags []Id) (State, *FlagSet, error) {
