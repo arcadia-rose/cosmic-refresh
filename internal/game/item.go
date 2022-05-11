@@ -124,7 +124,11 @@ func MagnifyCaduceusPage1(items []Id) (string, *FlagSet) {
 	}
 
 	if foundMag && foundPage {
-		return `The entire page fills with tightly-packed words documenting the process of finding and communicating with - something. You're not sure what. It describes moonlit rituals, strange contortions that you struggle to picture in your mind's eye. The notes are detailed, as though the writer had already tried many of them.`, nil
+		flagSet := &FlagSet{
+			FlagId:   Id(2004),
+			NewValue: true,
+		}
+		return `The entire page fills with tightly-packed words documenting the process of finding and communicating with - something. You're not sure what. It describes moonlit rituals, strange contortions that you struggle to picture in your mind's eye. The notes are detailed, as though the writer had already tried many of them.`, flagSet
 	}
 
 	return "", nil

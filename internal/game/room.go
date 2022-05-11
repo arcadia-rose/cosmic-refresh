@@ -274,9 +274,16 @@ func SecretRoom(state State) Room {
 
 	return Room{
 		Description: description,
-		Items:       []Item{},
-		Actions:     []Action{},
-		Properties:  map[string]bool{},
+		Items:       []Item{ItemRegistry[Id(9)]},
+		Actions: []Action{
+			{
+				Do: CollectItemEvt,
+				It: "Take page",
+				To: Id(9),
+				Is: ItemE,
+			},
+		},
+		Properties: map[string]bool{},
 	}.Prepare(state)
 }
 
