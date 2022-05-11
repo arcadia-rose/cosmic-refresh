@@ -42,6 +42,30 @@ var ItemRegistry = map[Id]Item{
 	},
 }
 
+var ItemInteractions = []func([]Id) string{
+	MagnifyCaduceusBook,
+}
+
+func MagnifyCaduceusBook(items []Id) string {
+	foundMag := false
+	foundBook := false
+
+	for _, id := range items {
+		if id == Id(7) {
+			foundMag = true
+		}
+		if id == Id(6) {
+			foundBook = true
+		}
+	}
+
+	if foundMag && foundBook {
+		return `The words in the book appear larger, clearer, sharper... more profound.`
+	}
+
+	return ""
+}
+
 func collectItem(state State, itemIds []Id) (State, *FlagSet, error) {
 	var flagSet *FlagSet = nil
 
@@ -63,11 +87,22 @@ func collectItem(state State, itemIds []Id) (State, *FlagSet, error) {
 }
 
 func useItems(state State, itemIds []Id) (State, *FlagSet, error) {
+	foundUse := false
+
+	for _, interaction := range ItemInteractions {
+		result := interaction(itemIds)
+
+		if result != "" {
+			state.Notifications = append(state.Notifications, result)
+			foundUse = true
+		}
+	}
+
 	if len(itemIds) == 0 {
 		state.Notifications = append(state.Notifications, "How are you planning to use nothing?")
-	} else if len(itemIds) == 1 {
+	} else if len(itemIds) == 1 && !foundUse {
 		state.Notifications = append(state.Notifications, "You're not really sure how to use that.")
-	} else {
+	} else if !foundUse {
 		state.Notifications = append(state.Notifications, "You're not really sure how to use those together.")
 	}
 
