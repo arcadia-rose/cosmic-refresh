@@ -18,12 +18,12 @@
             padding: 8px;
             border: 1px solid black;
           }
-
+          
           div#ui > div#player > div#actions {
             margin-top: 16px;
           }
 
-          div.hidden {
+          .hidden {
             display: none;
           }
 
@@ -65,7 +65,7 @@
         <div id="player">
           <div class="content"></div>
           <p>Inventory</p>
-          <select multiple id="inventory"></select>
+          <select multiple class="hidden" id="inventory"></select>
           <button id="inventory-use" onclick="useItems()">Use</button>
           <div id="actions"></div>
         </div>
@@ -116,6 +116,15 @@
 
           const renderInventory = function() {
             inventory.innerText = '';
+
+            if (Object.keys(state.player.inventory).length == 0) {
+              inventory.classList.add("hidden")
+              console.log("Inventory hidden");
+            } else {
+              inventory.classList.remove("hidden");
+              console.log("Inventory no longer hidden");
+            }
+
             for (let [id, item] of Object.entries(state.player.inventory)) {
               let option = document.createElement("option");
               option.value = id;
