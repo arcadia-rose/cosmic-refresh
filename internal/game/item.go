@@ -20,6 +20,22 @@ var ItemRegistry = map[Id]Item{
 		Name:        "Candlestick",
 		Description: `A candlestick. The candle has burned most of the way down, but it's still lit for now. You wonder, why was it lit in the first place?`,
 	},
+	Id(3): {
+		Name:        "Book with Y-shaped symbol",
+		Description: `An old-looking book with a strange, yellow Y-shaped symbol on the cover.`,
+	},
+	Id(4): {
+		Name:        "Book with Z-shaped symbol",
+		Description: `An old-looking book with a snakelike Z-shaped symbol on the cover.`,
+	},
+	Id(5): {
+		Name:        "Book with squid-shaped symbol",
+		Description: `An old-looking book with some kind of squid on the cover. You're not sure this is a biology textbook, though.`,
+	},
+	Id(6): {
+		Name:        "Book with a caduceus",
+		Description: `Some sort of book of folk remedies. Looks like several pages have been torn out.`,
+	},
 }
 
 func collectItem(state State, itemIds []Id) (State, *FlagSet, error) {

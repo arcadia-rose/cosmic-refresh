@@ -19,6 +19,7 @@ func RoomRegistry(state State) map[Id]Room {
 		Id(1002): DarkRoom(state),
 		Id(1003): LockedRoom(),
 		Id(1004): UnlockedRoom(),
+		Id(1005): Parlour(),
 	}
 }
 
@@ -46,7 +47,8 @@ func ShoeRoom() Room {
 	description := `The entrance is surprisingly spaceous.  To your right is a large rack for
   leaving one's shoes.  It's unlikely that a single living soul has been through here in some time
   and the shoes left on the rack are tattered and falling to pieces.
-  
+
+	There's a small door to the left, leading to some sort of small parlour.
   You can see there is a dark room to the right as you look down the hallway.`
 
 	actions := []Action{
@@ -64,6 +66,12 @@ func ShoeRoom() Room {
 		},
 		{
 			Do: EnterRoomEvt,
+			It: "Enter small door",
+			To: Id(1005),
+			Is: RoomE,
+		},
+		{
+			Do: EnterRoomEvt,
 			It: "Enter dark room",
 			To: Id(1002),
 			Is: RoomE,
@@ -78,12 +86,38 @@ func ShoeRoom() Room {
 	}
 }
 
+func Parlour() Room {
+	description := `Some kind of parlour. Altogether a little too homey for this place.
+	A chair sits against a wall, with a small end table next to it. The wall behind it looks unstable - you wouldn't like to sit there too long.
+	A few books are strewn on the end table, left there by someone who isn't terribly careful with their possessions when they're done with them.`
+
+	return Room{
+		Description: description,
+		Items:       []Item{ItemRegistry[Id(5)]},
+		Actions: []Action{
+			{
+				Do: EnterRoomEvt,
+				It: "Exit",
+				To: Id(1001),
+				Is: RoomE,
+			},
+			{
+				Do: CollectItemEvt,
+				It: "Take book",
+				To: Id(5),
+				Is: ItemE,
+			},
+		},
+		Properties: map[string]bool{},
+	}
+}
+
 func DarkRoom(state State) Room {
 	description := `A dark room. Good thing you brought that candlestick.`
 
 	room := Room{
 		Description: description,
-		Items:       []Item{},
+		Items:       []Item{ItemRegistry[Id(5)]},
 		Actions: []Action{
 			{
 				Do: EnterRoomEvt,
@@ -116,17 +150,31 @@ func DarkRoom(state State) Room {
 }
 
 func LockedRoom() Room {
-	description := `Strangely ordinary-looking for a place that was hard to get into.`
+	description := `Strangely ordinary-looking for a place that was hard to get into.
+	A pile of books lies on the ground. Seems someone was in a hurry and didn't reshelve their books when they were done.
+	Your inner librarian groans.`
 
 	return Room{
 		Description: description,
-		Items:       []Item{},
+		Items:       []Item{ItemRegistry[Id(3)], ItemRegistry[Id(6)]},
 		Actions: []Action{
 			{
 				Do: EnterRoomEvt,
 				It: "Exit",
 				To: Id(1002),
 				Is: RoomE,
+			},
+			{
+				Do: CollectItemEvt,
+				It: "Take book with Y-shaped symbol",
+				To: Id(3),
+				Is: ItemE,
+			},
+			{
+				Do: CollectItemEvt,
+				It: "Take book with caduceus",
+				To: Id(6),
+				Is: ItemE,
 			},
 		},
 		Properties: map[string]bool{
