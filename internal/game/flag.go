@@ -13,6 +13,7 @@ var FlagRegistry = map[Id]*Flag{
 	Id(2002): BookPuzzleSolved(),
 	Id(2003): SecretRoomDiscovered(),
 	Id(2004): ReadPage1(),
+	Id(2005): ReadPage2(),
 }
 
 func BoolMap(f map[Id]*Flag) map[Id]bool {
@@ -55,6 +56,13 @@ func SecretRoomDiscovered() *Flag {
 func ReadPage1() *Flag {
 	f := new(Flag)
 	f.Description = "The player has read the page describing the ritual"
+	f.Set = false
+	return f
+}
+
+func ReadPage2() *Flag {
+	f := new(Flag)
+	f.Description = "The player has read the page describing the contract"
 	f.Set = false
 	return f
 }

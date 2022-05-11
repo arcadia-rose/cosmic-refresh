@@ -22,6 +22,7 @@ func RoomRegistry(state State) map[Id]Room {
 		Id(1005): Parlour(state),
 		Id(1006): Study(state),
 		Id(1007): SecretRoom(state),
+		Id(1008): Workshop(state),
 	}
 }
 
@@ -285,18 +286,78 @@ func SecretRoom(state State) Room {
 	The front part of the room has a table covered with some equipment you don't understand terribly well, a pair of small vials, and a few sheets of paper. Looks like someone's been hard at work in here.
 	The chair at the table looks a lot less comfortable than the one in the room you just came from. Seems like this was a room for work, not for rest.`
 
+	actions := []Action{
+		{
+			Do: CollectItemEvt,
+			It: "Take page",
+			To: Id(9),
+			Is: ItemE,
+		},
+	}
+
+	if true {
+		description += "\nYou notice a door at the far side of the room. Somehow, you failed to notice it the first time you arrived."
+
+		actions = append(actions, Action{
+			Do: EnterRoomEvt,
+			It: "Enter far door",
+			To: Id(1008),
+			Is: RoomE,
+		})
+	}
+
 	return Room{
 		Description: description,
 		Items:       []Item{ItemRegistry[Id(9)]},
-		Actions: []Action{
-			{
-				Do: CollectItemEvt,
-				It: "Take page",
-				To: Id(9),
-				Is: ItemE,
-			},
+		Actions:     actions,
+		Properties:  map[string]bool{},
+	}.Prepare(state)
+}
+
+func Workshop(state State) Room {
+	// You feel unsettled by them in a way you can't explain.
+	description := `A large, open clinical room. This feels like a huge area to have been hidden away like this.
+	Several tables, each with a human body lying on them. It all seems orderly, methodical. Someone did this very deliberately.
+	A shelf in the back is lined with jars containing some kind of biological sample, but it doesn't seem to be human in origin.
+	On the only table without a body lies a thick notebook, with every single page covered in densely written notes. Seems to have been written by whoever was studying these bodies.`
+
+	actions := []Action{
+		{
+			Do: ExamineItemEvt,
+			It: "Examine bodies",
+			To: Id(11),
+			Is: ItemE,
 		},
-		Properties: map[string]bool{},
+		{
+			Do: ExamineItemEvt,
+			It: "Examine notebook",
+			To: Id(12),
+			Is: ItemE,
+		},
+		{
+			Do: CollectItemEvt,
+			It: "Take page",
+			To: Id(10),
+			Is: ItemE,
+		},
+	}
+
+	if state.Flags[Id(2005)].Set { // flag indicating the player read the page in this room
+		description += "\nOne wall in its entirety is filled with an enormous symbol, intricate and enormously complex. It must have taken days to draw."
+
+		actions = append(actions, Action{
+			Do: ExamineItemEvt,
+			It: "Examine wall",
+			To: Id(13),
+			Is: ItemE,
+		})
+	}
+
+	return Room{
+		Description: description,
+		Items:       []Item{},
+		Actions:     actions,
+		Properties:  map[string]bool{},
 	}.Prepare(state)
 }
 

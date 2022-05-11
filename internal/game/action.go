@@ -21,5 +21,6 @@ var EventsRegistry = map[Event]Handler{
 	EnterRoomEvt:   enterRoom,
 	SearchEvt:      search,
 	UseItemsEvt:    useItems,
+	ExamineItemEvt: examineItem,
 	OpenBoxEvt:     openBox,
 }

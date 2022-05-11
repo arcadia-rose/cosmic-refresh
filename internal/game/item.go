@@ -57,6 +57,18 @@ var ItemRegistry = map[Id]Item{
 		Name:        "Page 2 of caduceus book",
 		Description: `An anatomical study of a squid. At least, you think it's a squid, but some of these body parts look off to you...`,
 	},
+	Id(11): {
+		Name:        "Bodies",
+		Description: `No sign of foul play, as far as you can tell. These look like natural deaths.`,
+	},
+	Id(12): {
+		Name:        "Notebook",
+		Description: `You don't recognize it? But after all, you're the one who wrote it.`,
+	},
+	Id(13): {
+		Name:        "Wall",
+		Description: `Something feels familiar about this symbol. Familiar, and wrong. Your head sears, a sharp pain that feels like it could split your skull in two. You have a memory of having been in this place, once.`,
+	},
 }
 
 var ItemInteractions = []func([]Id) (string, *FlagSet){
@@ -148,7 +160,11 @@ func MagnifyCaduceusPage2(items []Id) (string, *FlagSet) {
 	}
 
 	if foundMag && foundPage {
-		return `What looked before like an anatomical diagram now seems more like the template for a contract, with the diagram itself forming one party's signature. The rest of the contract is already filled out, and a neat hand has signed the other side of the form with your name.`, nil
+		flagSet := &FlagSet{
+			FlagId:   Id(2005),
+			NewValue: true,
+		}
+		return `What looked before like an anatomical diagram now seems more like the template for a contract, with the diagram itself forming one party's signature. The rest of the contract is already filled out, and a neat hand has signed the other side of the form with your name.`, flagSet
 	}
 
 	return "", nil
@@ -199,6 +215,18 @@ func useItems(state State, itemIds []Id) (State, *FlagSet, error) {
 	}
 
 	return state, flagSet, nil
+}
+
+func examineItem(state State, itemIds []Id) (State, *FlagSet, error) {
+	for _, itemId := range itemIds {
+		item, ok := ItemRegistry[itemId]
+		if !ok {
+			continue
+		}
+
+		state.Notifications = append(state.Notifications, item.Description)
+	}
+	return state, nil, nil
 }
 
 func openBox(state State, flags []Id) (State, *FlagSet, error) {

@@ -11,6 +11,7 @@ const (
 	EnterRoomEvt   = Event("enterRoom")
 	SearchEvt      = Event("search")
 	UseItemsEvt    = Event("useItems")
+	ExamineItemEvt = Event("examineItem")
 	OpenBoxEvt     = Event("openBox")
 )
 
