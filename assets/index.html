@@ -70,7 +70,6 @@
             <input type="checkbox" id="checkbox-6" />
             <input type="checkbox" id="checkbox-7" />
             <br>
-            <button id="checkbox-button" onclick="openBox()">Open box</button>
           </div>
         </div>
         <div id="player">
@@ -127,6 +126,7 @@
 
             if (state.currentRoom.properties.checkboxes) {
               displayCheckboxArray();
+              actionsContainer.appendChild(openBoxAction());
             } else {
               destroyCheckboxArray();
             }
@@ -180,6 +180,22 @@
                 ids.push(parseInt(selected[i].value));
               }
               action("useItems", ids)();
+            }
+
+            return btn;
+          }
+
+          const openBoxAction = function () {
+            const btn = document.createElement("button");
+            btn.textContent = "Open box";
+            btn.onclick = function () {
+              const selected = checkboxArray.querySelectorAll("input");
+              let values = [];
+              for (let i = 0; i < selected.length; i++) {
+                values.push(selected[i].checked ? 1 : 0);
+              }
+
+              action("openBox", values)();
             }
 
             return btn;
