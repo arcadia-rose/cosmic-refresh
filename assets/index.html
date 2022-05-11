@@ -58,6 +58,8 @@
             <input type="checkbox" id="checkbox-5" />
             <input type="checkbox" id="checkbox-6" />
             <input type="checkbox" id="checkbox-7" />
+            <br>
+            <button id="checkbox-button" onclick="openBox()">Open box</button>
           </div>
         </div>
         <div id="player">
@@ -144,6 +146,16 @@
             }
 
             action("useItems", ids)();
+          }
+
+          window.openBox = function() {
+            const selected = checkboxArray.querySelectorAll("input");
+            let values = [];
+            for (let i = 0; i < selected.length; i++) {
+              values.push(selected[i].checked ? 1 : 0);
+            }
+
+            action("openBox", values)();
           }
 
           window.state = JSON.parse(NewState());

@@ -1,5 +1,7 @@
 package game
 
+import "fmt"
+
 type Item struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
@@ -48,6 +50,13 @@ func useItems(state State, itemIds []Id) (State, *FlagSet, error) {
 	} else {
 		state.Notifications = append(state.Notifications, "You're not really sure how to use those together.")
 	}
+
+	return state, nil, nil
+}
+
+func openBox(state State, itemIds []Id) (State, *FlagSet, error) {
+	fmt.Printf("Passed in values: %v\n", itemIds)
+	state.Notifications = append(state.Notifications, "You fiddle with the box but the lid stays tightly attached.")
 
 	return state, nil, nil
 }
