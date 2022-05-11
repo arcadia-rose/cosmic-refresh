@@ -178,7 +178,7 @@ func DarkRoom(state State) Room {
 			},
 			{
 				Do: EnterRoomEvt,
-				It: "Enter right door",
+				It: "Enter door ahead",
 				To: Id(1004),
 				Is: RoomE,
 			},
