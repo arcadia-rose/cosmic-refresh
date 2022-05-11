@@ -1,6 +1,11 @@
 package game
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
+
+var CheckboxSolution = []Id{1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0}
 
 type Item struct {
 	Name        string `json:"name"`
@@ -39,6 +44,10 @@ var ItemRegistry = map[Id]Item{
 	Id(7): {
 		Name:        "Magnifying glass",
 		Description: `A normal-looking magnifying glass with a hand-carved wooden handle.`,
+	},
+	Id(8): {
+		Name:        "Page 1 of caduceus book",
+		Description: `Describes medicines, elixirs and illnesses with strange symptoms...`,
 	},
 }
 
@@ -109,9 +118,27 @@ func useItems(state State, itemIds []Id) (State, *FlagSet, error) {
 	return state, nil, nil
 }
 
-func openBox(state State, itemIds []Id) (State, *FlagSet, error) {
-	fmt.Printf("Passed in values: %v\n", itemIds)
-	state.Notifications = append(state.Notifications, "You fiddle with the box but the lid stays tightly attached.")
+func openBox(state State, flags []Id) (State, *FlagSet, error) {
+	fmt.Printf("Passed in values: %v\n", flags)
 
-	return state, nil, nil
+	var flagSet *FlagSet = nil
+
+	if reflect.DeepEqual(flags, CheckboxSolution) {
+		state.Notifications = append(
+			state.Notifications,
+			`The lid of the box pops open with a satisfying clink. Inside, you find a page that appears to have been torn from a book.
+			Upon further inspection, you find the page describes medicines, elixirs and illnesses with strange symptoms...`,
+		)
+
+		flagSet = &FlagSet{
+			FlagId:   Id(2002),
+			NewValue: true,
+		}
+
+		state.PlayerState.Inventory[Id(8)] = ItemRegistry[Id(8)]
+	} else {
+		state.Notifications = append(state.Notifications, "You fiddle with the box but the lid stays tightly attached.")
+	}
+
+	return state, flagSet, nil
 }

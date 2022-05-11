@@ -10,6 +10,7 @@ type Flag struct {
 var FlagRegistry = map[Id]*Flag{
 	Id(2000): HaveLightSource(),
 	Id(2001): ItemDiscoverable(),
+	Id(2002): BookPuzzleSolved(),
 }
 
 func HaveLightSource() *Flag {
@@ -22,6 +23,13 @@ func HaveLightSource() *Flag {
 func ItemDiscoverable() *Flag {
 	f := new(Flag)
 	f.Description = "Some items can only be revealed once the player has fulfilled some condition."
+	f.Set = false
+	return f
+}
+
+func BookPuzzleSolved() *Flag {
+	f := new(Flag)
+	f.Description = "The player has solved the book puzzle."
 	f.Set = false
 	return f
 }
