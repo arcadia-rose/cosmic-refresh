@@ -229,8 +229,24 @@ func examineItem(state State, itemIds []Id) (State, *FlagSet, error) {
 	return state, nil, nil
 }
 
+func countChecks(checkboxes []Id) int {
+	count := 0
+	for _, checkbox := range checkboxes {
+		if checkbox == Id(1) {
+			count++
+		}
+	}
+
+	return count
+}
+
 func openBox(state State, flags []Id) (State, *FlagSet, error) {
 	fmt.Printf("Passed in values: %v\n", flags)
+
+	if countChecks(flags) != 4 {
+		state.Notifications = append(state.Notifications, "You somehow get the feeling you need to place all four books...")
+		return state, nil, nil
+	}
 
 	var flagSet *FlagSet = nil
 
