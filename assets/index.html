@@ -66,7 +66,6 @@
           <div class="content"></div>
           <p>Inventory</p>
           <select multiple class="hidden" id="inventory"></select>
-          <button id="inventory-use" onclick="useItems()">Use</button>
           <div id="actions"></div>
         </div>
       </div>
@@ -98,6 +97,10 @@
             room.innerText = state.currentRoom.description;
 
             actionsContainer.innerHTML = '';
+
+            if (Object.keys(state.player.inventory).length > 0) {
+              actionsContainer.appendChild(useItemsAction());
+            }
 
             for (const act of state.currentRoom.actions) {
               let button = document.createElement("button");
@@ -147,14 +150,19 @@
             }
           };
 
-          window.useItems = function() {
+          const useItemsAction = function() {
             const selected = inventory.selectedOptions;
+
             let ids = [];
             for (let i = 0; i < selected.length; i++) {
               ids.push(parseInt(selected[i].value));
             }
 
-            action("useItems", ids)();
+            const btn = document.createElement("button");
+            btn.textContent = "Use item(s)";
+            btn.onclick = action("useItems", ids);
+
+            return btn;
           }
 
           window.openBox = function() {
