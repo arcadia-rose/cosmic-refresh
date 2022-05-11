@@ -319,7 +319,7 @@ func Workshop(state State) Room {
 	description := `A large, open clinical room. This feels like a huge area to have been hidden away like this.
 	Several tables, each with a human body lying on them. It all seems orderly, methodical. Someone did this very deliberately.
 	A shelf in the back is lined with jars containing some kind of biological sample, but it doesn't seem to be human in origin.
-	On the only table without a body lies a thick notebook, with every single page covered in densely written notes. Seems to have been written by whoever was studying these bodies.`
+	On the only table without a body lies a thick notebook, with every single page covered in densely written notes. Seems to have been written by whoever was studying these bodies. There are notes on their condition, descriptions of some kind of affliction you don't recognize. It seems their suffering began long before whoever was studying them began their investigation.`
 
 	actions := []Action{
 		{
