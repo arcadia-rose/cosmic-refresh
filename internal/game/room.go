@@ -159,6 +159,7 @@ func Study() Room {
 				Is: RoomE,
 			},
 		},
+		Properties: map[string]bool{},
 	}
 }
 
