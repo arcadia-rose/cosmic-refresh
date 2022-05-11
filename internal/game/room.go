@@ -95,7 +95,7 @@ func Parlour(state State) Room {
 	
 	To your right is a beautiful, large wooden door that has been left completely ajar.  You can see that it leads to a study.`
 
-	return Room{
+	room := Room{
 		Description: description,
 		Items:       []Item{ItemRegistry[Id(5)]},
 		Actions: []Action{
@@ -119,7 +119,20 @@ func Parlour(state State) Room {
 			},
 		},
 		Properties: map[string]bool{},
-	}.Prepare(state)
+	}
+
+	// Flag set via reading the page that suggests
+	// this room had one more exit.
+	if state.Flags[Id(2003)].Set {
+		room.Actions = append(room.Actions, Action{
+			Do: EnterRoomEvt,
+			It: "Squeeze through the crumbling wall",
+			To: Id(1007),
+			Is: RoomE,
+		})
+	}
+
+	return room.Prepare(state)
 }
 
 func Study(state State) Room {
