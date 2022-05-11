@@ -12,12 +12,14 @@ type Room struct {
 	Properties  map[string]bool `json:"properties"`
 }
 
-var RoomRegistry = map[Id]Room{
-	Id(1000): MainEntrance(),
-	Id(1001): ShoeRoom(),
-	Id(1002): DarkRoom(),
-	Id(1003): LockedRoom(),
-	Id(1004): UnlockedRoom(),
+func RoomRegistry(state State) map[Id]Room {
+	return map[Id]Room{
+		Id(1000): MainEntrance(),
+		Id(1001): ShoeRoom(),
+		Id(1002): DarkRoom(state),
+		Id(1003): LockedRoom(),
+		Id(1004): UnlockedRoom(),
+	}
 }
 
 func MainEntrance() Room {
@@ -76,19 +78,13 @@ func ShoeRoom() Room {
 	}
 }
 
-func DarkRoom() Room {
+func DarkRoom(state State) Room {
 	description := `A dark room. Good thing you brought that candlestick.`
 
-	return Room{
+	room := Room{
 		Description: description,
 		Items:       []Item{},
 		Actions: []Action{
-			{
-				Do: SearchEvt,
-				It: "Search desk",
-				To: Id(2001),
-				Is: FlagE,
-			},
 			{
 				Do: EnterRoomEvt,
 				It: "Enter left door",
@@ -106,6 +102,17 @@ func DarkRoom() Room {
 			"dark": true,
 		},
 	}
+
+	if !state.PlayerState.HasKey() {
+		room.Actions = append(room.Actions, Action{
+			Do: SearchEvt,
+			It: "Search desk",
+			To: Id(2001),
+			Is: FlagE,
+		})
+	}
+
+	return room
 }
 
 func LockedRoom() Room {
@@ -198,7 +205,7 @@ func enterRoom(state State, roomIds []Id) (State, *FlagSet, error) {
 		return state, nil, errors.New("No room ID specified.")
 	}
 
-	targetRoom := RoomRegistry[roomIds[0]]
+	targetRoom := RoomRegistry(state)[roomIds[0]]
 	if targetRoom.Properties["dark"] && !FlagRegistry[Id(2000)].Set {
 		state.Notifications = append(state.Notifications, "The room is too dark.  What would you even do when you got in there?")
 		return state, nil, nil
@@ -208,7 +215,7 @@ func enterRoom(state State, roomIds []Id) (State, *FlagSet, error) {
 		return state, nil, nil
 	}
 
-	state.CurrentRoom = RoomRegistry[roomIds[0]]
+	state.CurrentRoom = RoomRegistry(state)[roomIds[0]]
 	return state, nil, nil
 }
 
