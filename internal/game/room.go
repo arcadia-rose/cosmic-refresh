@@ -295,7 +295,7 @@ func SecretRoom(state State) Room {
 		},
 	}
 
-	if true {
+	if state.Flags[Id(2004)].Set {
 		description += "\nYou notice a door at the far side of the room. Somehow, you failed to notice it the first time you arrived."
 
 		actions = append(actions, Action{
