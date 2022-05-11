@@ -25,14 +25,9 @@ type Player struct {
 	Inventory map[Id]Item `json:"inventory"`
 }
 
-func (p Player) HasKey() bool {
-	for itemId := range p.Inventory {
-		if itemId == Id(0) {
-			return true
-		}
-	}
-
-	return false
+func (p Player) HasItem(id Id) bool {
+	_, found := p.Inventory[id]
+	return found
 }
 
 // Internal representation of the game state only usably on the Go side.

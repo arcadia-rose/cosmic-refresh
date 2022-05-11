@@ -15,12 +15,12 @@ type Room struct {
 func RoomRegistry(state State) map[Id]Room {
 	return map[Id]Room{
 		Id(1000): MainEntrance(),
-		Id(1001): ShoeRoom(),
+		Id(1001): ShoeRoom(state),
 		Id(1002): DarkRoom(state),
-		Id(1003): LockedRoom(),
-		Id(1004): UnlockedRoom(),
-		Id(1005): Parlour(),
-		Id(1006): Study(),
+		Id(1003): LockedRoom(state),
+		Id(1004): UnlockedRoom(state),
+		Id(1005): Parlour(state),
+		Id(1006): Study(state),
 	}
 }
 
@@ -44,7 +44,7 @@ func MainEntrance() Room {
 	}
 }
 
-func ShoeRoom() Room {
+func ShoeRoom(state State) Room {
 	description := `The entrance is surprisingly spaceous.  To your right is a large rack for
   leaving one's shoes.  It's unlikely that a single living soul has been through here in some time
   and the shoes left on the rack are tattered and falling to pieces.
@@ -84,10 +84,10 @@ func ShoeRoom() Room {
 		Items:       []Item{ItemRegistry[Id(1)], ItemRegistry[Id(2)]},
 		Actions:     actions,
 		Properties:  map[string]bool{},
-	}
+	}.Prepare(state)
 }
 
-func Parlour() Room {
+func Parlour(state State) Room {
 	description := `Some kind of parlour. Altogether a little too homey for this place.
 	A chair sits against a wall, with a small end table next to it. The wall behind it looks unstable - you wouldn't like to sit there too long.
 	A few books are strewn on the end table, left there by someone who isn't terribly careful with their possessions when they're done with them.
@@ -118,10 +118,10 @@ func Parlour() Room {
 			},
 		},
 		Properties: map[string]bool{},
-	}
+	}.Prepare(state)
 }
 
-func Study() Room {
+func Study(state State) Room {
 	description := `A study with a surprising air of grandiosity in spite of its relatively small size.
 	It has an eclectic quality about it with various trinkets and knick-knacks on the shelves and desk.
 	
@@ -160,7 +160,7 @@ func Study() Room {
 			},
 		},
 		Properties: map[string]bool{},
-	}
+	}.Prepare(state)
 }
 
 func DarkRoom(state State) Room {
@@ -188,7 +188,7 @@ func DarkRoom(state State) Room {
 		},
 	}
 
-	if !state.PlayerState.HasKey() {
+	if !state.PlayerState.HasItem(Id(0)) {
 		room.Actions = append(room.Actions, Action{
 			Do: SearchEvt,
 			It: "Search desk",
@@ -197,10 +197,10 @@ func DarkRoom(state State) Room {
 		})
 	}
 
-	return room
+	return room.Prepare(state)
 }
 
-func LockedRoom() Room {
+func LockedRoom(state State) Room {
 	description := `Strangely ordinary-looking for a place that was hard to get into.
 	A pile of books lies on the ground. Seems someone was in a hurry and didn't reshelve their books when they were done.
 	Your inner librarian groans.`
@@ -231,10 +231,10 @@ func LockedRoom() Room {
 		Properties: map[string]bool{
 			"locked": true,
 		},
-	}
+	}.Prepare(state)
 }
 
-func UnlockedRoom() Room {
+func UnlockedRoom(state State) Room {
 	description := `Just your ordinary empty room.
 	On the far side of the wall is a bookshelf, mostly empty but featuring a scant two rows of books.
 	The titles seem strangely prosaic: a gardening book, a dry-looking biology textbook (at least a century out of date).
@@ -256,7 +256,7 @@ func UnlockedRoom() Room {
 		Properties: map[string]bool{
 			"checkboxes": true,
 		},
-	}
+	}.Prepare(state)
 }
 
 func (r *Room) AppendDescription(desc string) {
@@ -265,6 +265,14 @@ func (r *Room) AppendDescription(desc string) {
 
 func (r *Room) AddAction(action Action) {
 	r.Actions = append(r.Actions, action)
+}
+
+func (r Room) Prepare(state State) Room {
+	for id, item := range state.PlayerState.Inventory {
+		r.RemoveItem(item, id)
+	}
+
+	return r
 }
 
 func (r *Room) RemoveAction(event Event, target Id) {
@@ -309,7 +317,7 @@ func enterRoom(state State, roomIds []Id) (State, *FlagSet, error) {
 		state.Notifications = append(state.Notifications, "The room is too dark.  What would you even do when you got in there?")
 		return state, nil, nil
 	}
-	if targetRoom.Properties["locked"] && !state.PlayerState.HasKey() {
+	if targetRoom.Properties["locked"] && !state.PlayerState.HasItem(Id(0)) {
 		state.Notifications = append(state.Notifications, "The room is locked.  You need a key to get in.")
 		return state, nil, nil
 	}
