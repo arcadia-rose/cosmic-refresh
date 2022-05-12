@@ -273,7 +273,11 @@ func openBox(state State, flags []Id) (State, *FlagSet, error) {
 	fmt.Printf("Passed in values: %v\n", flags)
 
 	if countChecks(flags) != 4 {
-		state.Notifications = append(state.Notifications, "You somehow get the feeling you need to place all four books...")
+		state.Notifications = append(
+			state.Notifications,
+			`You somehow get the feeling you need to place all four books...
+			Maybe one of them has a clue about how to arrange them.`,
+		)
 		return state, nil, nil
 	}
 
