@@ -252,6 +252,7 @@ func examineItem(state State, itemIds []Id) (State, *FlagSet, error) {
 		// End the game here
 		if itemId == Id(13) {
 			state.CurrentRoom = GameOver(state)
+			state.PlayerState.Inventory = make(map[Id]Item)
 		}
 	}
 	return state, nil, nil
