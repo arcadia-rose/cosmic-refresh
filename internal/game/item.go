@@ -66,8 +66,10 @@ var ItemRegistry = map[Id]Item{
 		Description: `You don't recognize it? But after all, you're the one who wrote it.`,
 	},
 	Id(13): {
-		Name:        "Wall",
-		Description: `Something feels familiar about this symbol. Familiar, and wrong. Your head sears, a sharp pain that feels like it could split your skull in two. You have a memory of having been in this place, once.`,
+		Name: "Wall",
+		Description: `Something feels familiar about this symbol. Familiar, and wrong. Your head sears, a sharp pain that feels like it could split your skull in two. You have a memory of having been in this place, once.
+		
+		You need to get out of here. Something horrible happened, and you weren't meant to come back here. You can't let it be repeated, no matter what.`,
 	},
 }
 
