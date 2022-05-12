@@ -1,3 +1,3 @@
-module github.com/arcadia-rose/shopify-hackdays-march-2022
+module github.com/arcadia-rose/cosmic-refresh
 
 go 1.18
