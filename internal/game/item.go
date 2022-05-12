@@ -248,6 +248,11 @@ func examineItem(state State, itemIds []Id) (State, *FlagSet, error) {
 		}
 
 		state.Notifications = append(state.Notifications, item.Description)
+
+		// End the game here
+		if itemId == Id(13) {
+			state.CurrentRoom = GameOver(state)
+		}
 	}
 	return state, nil, nil
 }
