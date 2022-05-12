@@ -1,4 +1,4 @@
-# shopify-hackdays-march-2022
+# Cosmic Refresh
 
 This project contains a short text-based puzzle mystery game implemented by
 
