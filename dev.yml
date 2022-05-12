@@ -9,7 +9,7 @@ env:
   GO111MODULE: "off"
 
 commands:
-  build: cd cmd/wasm && GOOS=js GOARCH=wasm go build -o ../../assets/game.wasm
+  build: cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" assets && cd cmd/wasm && GOOS=js GOARCH=wasm go build -o ../../assets/game.wasm
   server: cd cmd/server && go run main.go
 
 open:
