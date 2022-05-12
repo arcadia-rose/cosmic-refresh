@@ -23,6 +23,7 @@ func RoomRegistry(state State) map[Id]Room {
 		Id(1006): Study(state),
 		Id(1007): SecretRoom(state),
 		Id(1008): Workshop(state),
+		Id(1009): GameOver(state),
 	}
 }
 
@@ -357,6 +358,28 @@ func Workshop(state State) Room {
 		Description: description,
 		Items:       []Item{},
 		Actions:     actions,
+		Properties:  map[string]bool{},
+	}.Prepare(state)
+}
+
+// The ending sequence triggered after seeing the symbol
+func GameOver(state State) Room {
+	description := `You have to leave, now. No one should ever return to this place where they could make the mistake that took place in this room.
+	
+	You hurry out of the room, as quickly as your legs can take you, hands scrambling for support along the wall. You don't feel like you're moving very well. You're not sure if you care.
+	
+	Using whatever you have with you, you prop up the unstable wall again, leaving that place closed up behind you. You hope there's no return to this place.
+	
+	You put back everything you took, leaving these things like a little memento of this cursed place. You're not really sure who it's for.
+	
+	Finally, you stagger out the front door. You're gone. Your head is pounding, worse every passing moment, and what you remembered is already leaving you. You're not sure you can get any further on your own. You wait a moment, hoping to gather your strength and focus your mind again. You have to refresh.
+	
+	The main entrance.`
+
+	return Room{
+		Description: description,
+		Items:       []Item{},
+		Actions:     []Action{},
 		Properties:  map[string]bool{},
 	}.Prepare(state)
 }
