@@ -65,6 +65,9 @@ func GameLoop(state State, event Event, ids []Id) State {
 
 		if flagToSet != nil {
 			newState.Flags[flagToSet.FlagId].Set = flagToSet.NewValue
+			// Rerendering the room ensures that its properties
+			// can change based on the new flags.
+			newState.CurrentRoom = RoomRegistry(state)[newState.CurrentRoom.Id]
 		}
 
 		state = newState

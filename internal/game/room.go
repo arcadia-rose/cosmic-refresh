@@ -10,6 +10,7 @@ type Room struct {
 	Items       []Item          `json:"items"`
 	Actions     []Action        `json:"actions"`
 	Properties  map[string]bool `json:"properties"`
+	Id          Id              `json:"id"`
 }
 
 func RoomRegistry(state State) map[Id]Room {
@@ -44,6 +45,7 @@ func MainEntrance() Room {
 		Items:       []Item{},
 		Actions:     actions,
 		Properties:  map[string]bool{},
+		Id:          Id(1000),
 	}
 }
 
@@ -87,6 +89,7 @@ func ShoeRoom(state State) Room {
 		Items:       []Item{ItemRegistry[Id(1)], ItemRegistry[Id(2)]},
 		Actions:     actions,
 		Properties:  map[string]bool{},
+		Id:          Id(1001),
 	}.Prepare(state)
 }
 
@@ -121,6 +124,7 @@ func Parlour(state State) Room {
 			},
 		},
 		Properties: map[string]bool{},
+		Id:         Id(1005),
 	}
 
 	// Flag set via reading the page that suggests
@@ -176,6 +180,7 @@ func Study(state State) Room {
 			},
 		},
 		Properties: map[string]bool{},
+		Id:         Id(1006),
 	}.Prepare(state)
 }
 
@@ -208,6 +213,7 @@ func DarkRoom(state State) Room {
 		Properties: map[string]bool{
 			"dark": true,
 		},
+		Id: Id(1002),
 	}
 
 	if !state.PlayerState.HasItem(Id(0)) {
@@ -253,6 +259,7 @@ func LockedRoom(state State) Room {
 		Properties: map[string]bool{
 			"locked": true,
 		},
+		Id: Id(1003),
 	}.Prepare(state)
 }
 
@@ -278,6 +285,7 @@ func UnlockedRoom(state State) Room {
 		Properties: map[string]bool{
 			"checkboxes": !state.Flags[Id(2002)].Set,
 		},
+		Id: Id(1004),
 	}.Prepare(state)
 }
 
@@ -312,6 +320,7 @@ func SecretRoom(state State) Room {
 		Items:       []Item{ItemRegistry[Id(9)]},
 		Actions:     actions,
 		Properties:  map[string]bool{},
+		Id:          Id(1007),
 	}.Prepare(state)
 }
 
@@ -359,6 +368,7 @@ func Workshop(state State) Room {
 		Items:       []Item{},
 		Actions:     actions,
 		Properties:  map[string]bool{},
+		Id:          Id(1008),
 	}.Prepare(state)
 }
 
@@ -381,6 +391,7 @@ func GameOver(state State) Room {
 		Items:       []Item{},
 		Actions:     []Action{},
 		Properties:  map[string]bool{},
+		Id:          Id(1009),
 	}.Prepare(state)
 }
 
