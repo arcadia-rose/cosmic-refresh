@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"syscall/js"
 
-	"github.com/arcadia-rose/shopify-hackdays-march-2022/internal/game"
+	"github.com/arcadia-rose/cosmic-refresh/internal/game"
 )
 
 var State game.State
