@@ -72,10 +72,31 @@ var ItemRegistry = map[Id]Item{
 }
 
 var ItemInteractions = []func([]Id) (string, *FlagSet){
+	MagnifyYellowBook,
 	MagnifyCaduceusBook,
 	MagnifyCaduceusPage3,
 	MagnifyCaduceusPage1,
 	MagnifyCaduceusPage2,
+}
+
+func MagnifyYellowBook(items []Id) (string, *FlagSet) {
+	foundMag := false
+	foundBook := false
+
+	for _, id := range items {
+		if id == Id(7) {
+			foundMag = true
+		}
+		if id == Id(3) {
+			foundBook = true
+		}
+	}
+
+	if foundMag && foundBook {
+		return `That's funny. You notice a note scrawled in the margins that you missed before. It reads, "Please reshelve the books when you're finished. Remember, the yellow sign is the shelving guide..."`, nil
+	}
+
+	return "", nil
 }
 
 func MagnifyCaduceusBook(items []Id) (string, *FlagSet) {
