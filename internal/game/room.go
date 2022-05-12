@@ -27,7 +27,7 @@ func RoomRegistry(state State) map[Id]Room {
 }
 
 func MainEntrance() Room {
-	description := `You approach a big spooky door!`
+	description := `The main entrance. Nowhere to go but in.`
 
 	actions := []Action{
 		{
